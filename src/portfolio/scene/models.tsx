@@ -51,7 +51,7 @@ const NIGHT_PALETTE: [string, string][] = [
   ["leafs", "#2c6e5c"],
   ["dirt", "#7a5a44"],
   ["grass", "#3c7a52"],
-  ["colorred", "#b9473f"],
+  ["colorred", "#9a4a3e"],
 ];
 
 function tuneMaterial(mat: THREE.Material) {
