@@ -17,13 +17,19 @@ import mushroomsModel from "@/assets/models/mushrooms.glb.asset.json";
 import chestModel from "@/assets/models/chest.glb.asset.json";
 import axeModel from "@/assets/models/axe.glb.asset.json";
 import grassModel from "@/assets/models/grass.glb.asset.json";
+import logStackModel from "@/assets/models/log-stack.glb.asset.json";
+import bedrollModel from "@/assets/models/bedroll.glb.asset.json";
+import bucketModel from "@/assets/models/bucket.glb.asset.json";
+import signpostModel from "@/assets/models/signpost.glb.asset.json";
+import stumpOldModel from "@/assets/models/stump-old.glb.asset.json";
+import rockTallModel from "@/assets/models/rock-tall.glb.asset.json";
 import { Instances, Model, type Instance } from "./models";
 import { CHEST, LANTERN, TELESCOPE, TENT, SKY_DIR, mulberry32 } from "./layout";
 import { useCamp } from "../store";
 import { sections, type SectionId } from "../content";
 import { radialTexture } from "./Fire";
 
-export const MODEL_URLS = [tentModel, stonesModel, logsModel, pineA, pineB, pineRound, pineDefault, rockLarge, rockSmall, logSeat, stumpModel, mushroomsModel, chestModel, axeModel, grassModel].map((m) => m.url);
+export const MODEL_URLS = [tentModel, stonesModel, logsModel, pineA, pineB, pineRound, pineDefault, rockLarge, rockSmall, logSeat, stumpModel, mushroomsModel, chestModel, axeModel, grassModel, logStackModel, bedrollModel, bucketModel, signpostModel, stumpOldModel, rockTallModel].map((m) => m.url);
 
 /* ---------------- Ground ---------------- */
 
@@ -59,6 +65,16 @@ export function Ground() {
       const d = Math.sqrt(rnd()) * size * 0.14;
       g.fillStyle = `rgba(${rnd() < 0.5 ? "120,96,70" : "50,40,30"},${0.2 + rnd() * 0.4})`;
       g.fillRect(size / 2 + Math.cos(a) * d, size / 2 + Math.sin(a) * d, 1 + rnd() * 3, 1 + rnd() * 3);
+    }
+    // A trodden trail leaving the clearing towards the viewer.
+    g.lineCap = "round";
+    for (let pass = 0; pass < 3; pass++) {
+      g.strokeStyle = `rgba(${pass === 0 ? "70,54,38,0.7" : pass === 1 ? "92,72,50,0.55" : "110,88,62,0.35"})`;
+      g.lineWidth = 16 - pass * 5;
+      g.beginPath();
+      g.moveTo(size / 2 + 6, size / 2 + 40);
+      g.bezierCurveTo(size / 2 + 40, size * 0.62, size / 2 - 30, size * 0.72, size / 2 + 20, size * 0.85);
+      g.stroke();
     }
     const t = new THREE.CanvasTexture(c);
     t.colorSpace = THREE.SRGBColorSpace;
@@ -122,7 +138,17 @@ function useForest() {
       const r = 5 + rnd() * 6;
       shrooms.push({ x: Math.cos(a) * r, z: Math.sin(a) * r, rot: rnd() * 6.28, scale: 0.7 + rnd() * 0.6 });
     }
-    return { groups, rocks, smallRocks, grass, shrooms };
+    const tallRocks: Instance[] = [
+      { x: -10.5, z: 3.5, rot: 0.4, scale: 1 },
+      { x: 11.5, z: -5, rot: 2.1, scale: 1.3 },
+      { x: -6.5, z: -12.5, rot: 1.2, scale: 0.8 },
+    ];
+    const stumps: Instance[] = [
+      { x: 6.8, z: 4.6, rot: 0.3, scale: 1 },
+      { x: -7.2, z: 5.2, rot: 2.3, scale: 0.8 },
+      { x: 9.2, z: -1.5, rot: 1.1, scale: 1.1 },
+    ];
+    return { groups, rocks, smallRocks, grass, shrooms, tallRocks, stumps };
   }, []);
 }
 
@@ -138,6 +164,8 @@ export function Forest() {
       <Instances url={rockSmall.url} size={0.45} items={f.smallRocks} />
       <Instances url={grassModel.url} size={0.35} items={f.grass} />
       <Instances url={mushroomsModel.url} size={0.32} items={f.shrooms} />
+      <Instances url={rockTallModel.url} size={1.6} items={f.tallRocks} />
+      <Instances url={stumpOldModel.url} size={0.4} items={f.stumps} />
     </group>
   );
 }
@@ -154,6 +182,10 @@ export function CampProps() {
     <group>
       <Model url={stonesModel.url} size={1.5} fit="width" />
       <Model url={logsModel.url} size={1.0} fit="width" position={[0, 0.02, 0]} rotation={0.4} />
+      <Model url={logStackModel.url} size={1.4} fit="width" position={[-6.1, 0, -1.2]} rotation={1.3} />
+      <Model url={bedrollModel.url} size={1.5} fit="width" position={[-2.0, 0, -3.7]} rotation={0.5} />
+      <Model url={bucketModel.url} size={0.42} position={[4.4, 0, 0.6]} rotation={0.4} />
+      <Model url={signpostModel.url} size={1.7} position={[2.6, 0, 6.6]} rotation={-0.5} />
       {seats.map((s, i) => (
         <Model key={i} url={logSeat.url} size={1.45} fit="width" position={[Math.cos(s.a) * s.r, 0, Math.sin(s.a) * s.r]} rotation={-s.a + Math.PI / 2} />
       ))}

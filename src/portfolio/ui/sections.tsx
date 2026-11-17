@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from "react";
-import { Copy, Github, Linkedin, Mail, Send, Shuffle } from "lucide-react";
+import { Copy, Github, Mail, MessageCircle, Phone, Send, Shuffle } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
 import { contact, filterSkills, levelLabel, manifesto, roadmap, skillCategories, skills, type Skill, type SkillCategory } from "../content";
