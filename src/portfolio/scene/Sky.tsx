@@ -121,7 +121,7 @@ export function SkyDome() {
     [],
   );
   useFrame((state) => {
-    mat.uniforms.uTime.value = state.clock.elapsedTime;
+    mat.uniforms["uTime"]!.value = state.clock.elapsedTime;
   });
   return (
     <mesh material={mat} renderOrder={-1} frustumCulled={false}>
@@ -206,8 +206,8 @@ export function Constellations() {
         col.push(color.r, color.g, color.b);
         grp.push(gi);
         seed.push(Math.sin(i * 12.9 + gi) * 0.5 + 0.5);
-        if (i > 0) {
-          const a = pts[i - 1];
+        const a = pts[i - 1];
+        if (a) {
           lpos.push(a.x, a.y, a.z, p.x, p.y, p.z);
           lcol.push(color.r, color.g, color.b, color.r, color.g, color.b);
         }
@@ -236,14 +236,14 @@ export function Constellations() {
   useFrame((state, dt) => {
     const target = focus === "sky" ? 1 : 0;
     reveal.current += (target - reveal.current) * (1 - Math.exp(-3 * Math.min(dt, 0.05)));
-    starMat.uniforms.uTime.value = state.clock.elapsedTime;
-    starMat.uniforms.uReveal.value = reveal.current;
-    const hl = starMat.uniforms.uHighlight.value as THREE.Vector3;
+    starMat.uniforms["uTime"]!.value = state.clock.elapsedTime;
+    starMat.uniforms["uReveal"]!.value = reveal.current;
+    const hl = starMat.uniforms["uHighlight"]!.value as THREE.Vector3;
     const ids = ["now", "exploring", "future"];
-    const goal = ids.map((id) => (highlight == null ? 1 : highlight === id ? 1.25 : 0.35));
-    hl.x += (goal[0] - hl.x) * 0.1;
-    hl.y += (goal[1] - hl.y) * 0.1;
-    hl.z += (goal[2] - hl.z) * 0.1;
+    const g = (id: string) => (highlight == null ? 1 : highlight === id ? 1.25 : 0.35);
+    hl.x += (g(ids[0]!) - hl.x) * 0.1;
+    hl.y += (g(ids[1]!) - hl.y) * 0.1;
+    hl.z += (g(ids[2]!) - hl.z) * 0.1;
     lineMat.opacity = 0.08 + reveal.current * 0.5;
   });
 
@@ -261,11 +261,11 @@ export function Constellations() {
                   data-dim={highlight != null && highlight !== c.id ? "" : undefined}
                   style={{ ["--star" as string]: COLORS[c.id], animationDelay: `${i * 90}ms` }}
                 >
-                  {c.stars[i].label}
+                  {c.stars[i]?.label}
                 </div>
               </Html>
             ))}
-            <Html position={pts[Math.floor(pts.length / 2)].clone().multiplyScalar(1).add(new THREE.Vector3(0, 13, 0))} center zIndexRange={[20, 10]} style={{ pointerEvents: "none" }}>
+            <Html position={(pts[Math.floor(pts.length / 2)] ?? new THREE.Vector3()).clone().add(new THREE.Vector3(0, 13, 0))} center zIndexRange={[20, 10]} style={{ pointerEvents: "none" }}>
               <div className="constellation-name" style={{ ["--star" as string]: COLORS[c.id] }}>
                 <span>{c.stage}</span>
                 {c.name}

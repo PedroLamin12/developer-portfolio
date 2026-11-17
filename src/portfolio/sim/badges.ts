@@ -52,7 +52,7 @@ export function step(world: World, dtRaw: number) {
   }
   for (let it = 0; it < ITERATIONS; it++) {
     for (let i = 0; i < bodies.length; i++) {
-      for (let j = i + 1; j < bodies.length; j++) collide(bodies[i], bodies[j]);
+      for (let j = i + 1; j < bodies.length; j++) collide(bodies[i]!, bodies[j]!);
     }
     for (const b of bodies) walls(b, width, height, dt);
   }

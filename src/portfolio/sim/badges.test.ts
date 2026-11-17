@@ -22,7 +22,7 @@ describe("badge physics", () => {
     dragTo(world, "b0", 100, 100, 1 / 60);
     dragTo(world, "b0", 120, 100, 1 / 60);
     release(world, "b0");
-    expect(world.bodies[0].vx).toBeGreaterThan(500);
+    expect(world.bodies[0]!.vx).toBeGreaterThan(500);
   });
 });
 
@@ -30,7 +30,7 @@ describe("skill filter", () => {
   it("returns only the chosen category, strongest first", () => {
     const front = filterSkills(skills, "Front-end");
     expect(front.every((s) => s.category === "Front-end")).toBe(true);
-    for (let i = 1; i < front.length; i++) expect(front[i - 1].level).toBeGreaterThanOrEqual(front[i].level);
+    for (let i = 1; i < front.length; i++) expect(front[i - 1]!.level).toBeGreaterThanOrEqual(front[i]!.level);
     expect(filterSkills(skills, "Todas")).toHaveLength(skills.length);
   });
 

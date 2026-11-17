@@ -259,9 +259,9 @@ function Panel() {
     }
   }, [focus]);
   const idx = sections.findIndex((s) => s.id === shown);
-  const section = sections[idx];
-  const prev = sections[(idx + sections.length - 1) % sections.length];
-  const next = sections[(idx + 1) % sections.length];
+  const section = sections[idx]!;
+  const prev = sections[(idx + sections.length - 1) % sections.length]!;
+  const next = sections[(idx + 1) % sections.length]!;
   const Icon = ICONS[shown];
 
   return (
@@ -379,7 +379,7 @@ export function Overlay() {
       if (tag === "INPUT" || tag === "TEXTAREA") return;
       const st = useCamp.getState();
       if (e.key === "Escape") st.setFocus("overview");
-      else if (["1", "2", "3", "4"].includes(e.key) && st.entered) st.setFocus(sections[Number(e.key) - 1].id);
+      else if (["1", "2", "3", "4"].includes(e.key) && st.entered) st.setFocus(sections[Number(e.key) - 1]!.id);
       else if (e.key.toLowerCase() === "m" && st.entered) st.setMuted(!st.muted);
     };
     window.addEventListener("keydown", onKey);

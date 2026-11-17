@@ -87,7 +87,7 @@ function blocked(x: number, z: number) {
 function useForest() {
   return useMemo(() => {
     const rnd = mulberry32(42);
-    const groups: Instance[][] = [[], [], [], []];
+    const groups: [Instance[], Instance[], Instance[], Instance[]] = [[], [], [], []];
     let tries = 0;
     while (tries++ < 900 && groups.reduce((n, g) => n + g.length, 0) < 95) {
       const a = rnd() * Math.PI * 2;
@@ -97,7 +97,7 @@ function useForest() {
       if (blocked(x, z)) continue;
       const near = groups.flat().some((t) => Math.hypot(t.x - x, t.z - z) < 2.1);
       if (near) continue;
-      const k = Math.floor(rnd() * 4);
+      const k = Math.floor(rnd() * 4) as 0 | 1 | 2 | 3;
       groups[k].push({ x, z, rot: rnd() * Math.PI * 2, scale: 0.75 + rnd() * 0.55 });
     }
     const rocks: Instance[] = [];

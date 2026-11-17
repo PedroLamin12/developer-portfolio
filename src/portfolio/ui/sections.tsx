@@ -69,7 +69,9 @@ function BadgePlayground({ list }: { list: Skill[] }) {
     let raf = 0;
     let last = performance.now();
     let visible = true;
-    const io = new IntersectionObserver(([e]) => (visible = e.isIntersecting));
+    const io = new IntersectionObserver(([e]) => {
+      visible = e?.isIntersecting ?? true;
+    });
     io.observe(el);
     const ro = new ResizeObserver(() => {
       if (world.current) world.current.width = el.clientWidth;

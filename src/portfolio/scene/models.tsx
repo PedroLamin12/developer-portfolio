@@ -34,7 +34,8 @@ export function useModelParts(url: string, size: number, fit: "height" | "width"
           const geo = m.geometry.clone();
           geo.clearGroups();
           geo.setDrawRange(g.start, g.count);
-          parts.push({ geometry: geo, material: m.material[g.materialIndex ?? 0], matrix });
+          const mat = m.material[g.materialIndex ?? 0];
+          if (mat) parts.push({ geometry: geo, material: mat, matrix });
         }
       } else {
         parts.push({ geometry: m.geometry, material: m.material, matrix });
@@ -45,8 +46,8 @@ export function useModelParts(url: string, size: number, fit: "height" | "width"
 }
 
 function tuneMaterial(mat: THREE.Material) {
-  if (mat.userData.tuned) return;
-  mat.userData.tuned = true;
+  if (mat.userData["tuned"]) return;
+  mat.userData["tuned"] = true;
   const m = mat as THREE.MeshStandardMaterial;
   if ("metalness" in m) {
     m.metalness = 0;
@@ -59,7 +60,7 @@ type Xform = { position?: [number, number, number]; rotation?: number; scale?: n
 export function Model({ url, size, fit, position, rotation = 0, scale = 1 }: { url: string; size: number; fit?: "height" | "width" } & Xform) {
   const parts = useModelParts(url, size, fit);
   return (
-    <group position={position} rotation-y={rotation} scale={scale}>
+    <group position={position ?? [0, 0, 0]} rotation-y={rotation} scale={scale}>
       {parts.map((p, i) => (
         <mesh key={i} geometry={p.geometry} material={p.material} matrix={p.matrix} matrixAutoUpdate={false} />
       ))}

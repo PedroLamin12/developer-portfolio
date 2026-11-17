@@ -123,10 +123,10 @@ export function Fire() {
     const t = state.clock.elapsedTime;
     // Point size scales with the drawing buffer height so particles keep their size across screens.
     const scale = size.height * gl.getPixelRatio() * 1.1;
-    flameMat.uniforms.uTime.value = t;
-    flameMat.uniforms.uScale.value = scale;
-    emberMat.uniforms.uTime.value = t;
-    emberMat.uniforms.uScale.value = scale;
+    for (const m of [flameMat, emberMat]) {
+      m.uniforms["uTime"]!.value = t;
+      m.uniforms["uScale"]!.value = scale;
+    }
     const flick = 0.82 + 0.1 * Math.sin(t * 11.3) + 0.06 * Math.sin(t * 23.7 + 1.3) + 0.05 * Math.sin(t * 5.1);
     if (light.current) {
       light.current.intensity = 34 * flick * (hovered ? 1.15 : 1);
