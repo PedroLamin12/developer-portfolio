@@ -213,7 +213,7 @@ function Dock() {
       className={cn(
         "absolute bottom-4 left-1/2 z-30 -translate-x-1/2 transition-all duration-700 sm:bottom-6",
         entered ? "opacity-100" : "pointer-events-none translate-y-6 opacity-0",
-        panel && "max-lg:pointer-events-none max-lg:translate-y-24 max-lg:opacity-0",
+        panel && "max-lg:pointer-events-none max-lg:translate-y-24 max-lg:opacity-0 lg:left-[calc(50%-240px)]",
       )}
     >
       <ul className="glass flex items-center gap-1 rounded-full p-1.5">
