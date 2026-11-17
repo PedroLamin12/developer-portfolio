@@ -129,7 +129,7 @@ export function Fire() {
     }
     const flick = 0.82 + 0.1 * Math.sin(t * 11.3) + 0.06 * Math.sin(t * 23.7 + 1.3) + 0.05 * Math.sin(t * 5.1);
     if (light.current) {
-      light.current.intensity = 34 * flick * (hovered ? 1.15 : 1);
+      light.current.intensity = 40 * flick * (hovered ? 1.15 : 1);
       light.current.position.set(Math.sin(t * 7.1) * 0.05, 0.9 + Math.sin(t * 9.3) * 0.04, Math.cos(t * 6.3) * 0.05);
     }
     if (glow.current) glow.current.scale.setScalar(2.6 * (0.92 + flick * 0.1));
@@ -138,7 +138,7 @@ export function Fire() {
 
   return (
     <group position={[0, FIRE_BASE, 0]}>
-      <pointLight ref={light} color="#ff8a3a" intensity={34} distance={0} decay={1.7} />
+      <pointLight ref={light} color="#ff8a3a" intensity={34} distance={0} decay={1.9} />
       <points geometry={flameGeo} material={flameMat} frustumCulled={false} />
       <points geometry={emberGeo} material={emberMat} frustumCulled={false} />
       <sprite ref={glow} position={[0, 0.45, 0]} scale={2.6}>

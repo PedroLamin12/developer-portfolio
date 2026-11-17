@@ -45,6 +45,15 @@ export function useModelParts(url: string, size: number, fit: "height" | "width"
   }, [scene, size, fit]);
 }
 
+const NIGHT_PALETTE: [string, string][] = [
+  ["woodbark", "#6a4532"],
+  ["wood", "#8a5a3c"],
+  ["leafs", "#2c6e5c"],
+  ["dirt", "#7a5a44"],
+  ["grass", "#3c7a52"],
+  ["colorred", "#b9473f"],
+];
+
 function tuneMaterial(mat: THREE.Material) {
   if (mat.userData["tuned"]) return;
   mat.userData["tuned"] = true;
@@ -53,12 +62,10 @@ function tuneMaterial(mat: THREE.Material) {
     m.metalness = 0;
     m.roughness = Math.max(0.75, m.roughness ?? 1);
   }
-  if (m.color) {
-    // Calm the bright daytime kit colors for a night scene.
-    const hsl = { h: 0, s: 0, l: 0 };
-    m.color.getHSL(hsl);
-    m.color.setHSL(hsl.h, hsl.s * 0.62, hsl.l * 0.85);
-  }
+  // Re-grade the bright daytime kit palette for a night forest.
+  const name = mat.name.toLowerCase();
+  const remap = NIGHT_PALETTE.find(([k]) => name.startsWith(k));
+  if (remap && m.color) m.color.set(remap[1]);
 }
 
 type Xform = { position?: [number, number, number]; rotation?: number; scale?: number };
