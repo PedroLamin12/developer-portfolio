@@ -4,10 +4,12 @@ import { Environment, Lightformer, OrbitControls, useGLTF } from "@react-three/d
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import * as THREE from "three";
 import { useCamp, perfStats } from "../store";
-import { WAYPOINTS } from "./layout";
+import { WAYPOINTS, SKY_PORTRAIT } from "./layout";
+import { labelLayer } from "./labelLayer";
 import { SkyDome, Constellations, HORIZON } from "./Sky";
 import { Fire } from "./Fire";
 import { Ground, Forest, CampProps, Hotspots, MODEL_URLS } from "./Camp";
+import { Mountains, Moon, ShootingStar, Particles, Mist } from "./Atmosphere";
 
 MODEL_URLS.forEach((u) => useGLTF.preload(u));
 
@@ -41,8 +43,10 @@ function CameraRig() {
     a.active = true;
     if (useCamp.getState().snap) {
       // Deep link (?ponto=...): jump straight to the waypoint.
-      a.fromPos.copy(WAYPOINTS[key].pos);
-      a.fromTarget.copy(WAYPOINTS[key].target);
+      const portrait = window.innerWidth / window.innerHeight < 0.8;
+      const wp = key === "sky" && portrait ? SKY_PORTRAIT : WAYPOINTS[key];
+      a.fromPos.copy(wp.pos);
+      a.fromTarget.copy(wp.target);
       a.t = 0.999;
       useCamp.getState().setSnap(false);
     }
@@ -53,7 +57,8 @@ function CameraRig() {
     const c = controls.current;
     if (!c) return;
     const a = anim.current;
-    const wp = WAYPOINTS[key];
+    const portrait = size.width / size.height < 0.8;
+    const wp = key === "sky" && portrait ? SKY_PORTRAIT : WAYPOINTS[key];
 
     if (a.active) {
       a.t = Math.min(1, a.t + dt / a.dur);
@@ -80,14 +85,14 @@ function CameraRig() {
     const panel = entered && key !== "overview" && key !== "intro";
     const desktop = size.width >= 1024;
     const goalX = panel && desktop ? Math.min(260, size.width * 0.2) : 0;
-    const goalY = panel && !desktop ? size.height * 0.24 : 0;
+    const goalY = panel && !desktop ? size.height * (key === "sky" ? 0.22 : 0.24) : 0;
     const k = 1 - Math.exp(-4 * dt);
     offset.current.x += (goalX - offset.current.x) * k;
     offset.current.y += (goalY - offset.current.y) * k;
     const cam = camera as THREE.PerspectiveCamera;
-    const fov = size.width / size.height < 0.8 ? 62 : 50;
-    if (cam.fov !== fov) {
-      cam.fov = fov;
+    const fov = portrait ? (key === "sky" ? 92 : 62) : 50;
+    if (Math.abs(cam.fov - fov) > 0.01) {
+      cam.fov += (fov - cam.fov) * (a.active ? 1 - Math.exp(-3 * dt) : 1);
       cam.updateProjectionMatrix();
     }
     if (Math.abs(offset.current.x) > 0.5 || Math.abs(offset.current.y) > 0.5) {
@@ -166,7 +171,7 @@ export default function CampScene() {
   const ready = useCamp((s) => s.ready);
   const fogColor = useMemo(() => HORIZON.clone(), []);
   return (
-    <div className="absolute inset-0" data-scene-ready={ready ? "" : undefined}>
+    <div className="cinematic absolute inset-0 overflow-hidden" data-scene-ready={ready ? "" : undefined}>
       <Canvas
         dpr={[1, 1.75]}
         camera={{ position: WAYPOINTS.intro.pos.toArray(), fov: 50, near: 0.1, far: 400 }}
@@ -178,8 +183,13 @@ export default function CampScene() {
         <Lights />
         <SkyDome />
         <Constellations />
+        <Mountains />
+        <Moon />
+        <ShootingStar />
         <Ground />
         <Fire />
+        <Particles />
+        <Mist />
         <Suspense fallback={null}>
           <Forest />
           <CampProps />
@@ -189,6 +199,8 @@ export default function CampScene() {
         <CameraRig />
         <Stats />
       </Canvas>
+      <div ref={labelLayer} className="pointer-events-none absolute inset-0 z-10" />
+      <div className="grain" aria-hidden />
     </div>
   );
 }

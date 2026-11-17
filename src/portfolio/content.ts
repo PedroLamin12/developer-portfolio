@@ -122,11 +122,13 @@ export const roadmap: Constellation[] = [
   },
 ];
 
-// Replace with Pedro's real links before presenting.
 export const contact = {
-  email: "pedrohenrique.dev@gmail.com",
-  github: "https://github.com/pedrohenriquelamin",
-  linkedin: "https://www.linkedin.com/in/pedrohenriquelamin",
+  email: "pedro.lamin10@gmail.com",
+  github: "https://github.com/PedroLamin12",
+  githubUser: "PedroLamin12",
+  phone: "(11) 95050-3332",
+  phoneHref: "tel:+5511950503332",
+  whatsapp: "https://wa.me/5511950503332",
   status: "Disponível para estágios e projetos",
   statusDetail: "Aberto a oportunidades de estágio, projetos colaborativos e conversas sobre tecnologia.",
 };

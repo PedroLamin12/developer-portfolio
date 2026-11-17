@@ -16,23 +16,26 @@ function dirFromAzEl(azDeg: number, elDeg: number) {
 
 export const SKY_RADIUS = 95;
 export const CONSTELLATION_CENTERS = {
-  now: dirFromAzEl(-16, 40),
-  exploring: dirFromAzEl(4, 52),
-  future: dirFromAzEl(22, 40),
+  now: dirFromAzEl(-6, 37),
+  exploring: dirFromAzEl(9, 51),
+  future: dirFromAzEl(24, 36),
 } as const;
-export const SKY_DIR = dirFromAzEl(3, 45);
+export const SKY_DIR = dirFromAzEl(7, 45);
+export const MOON_DIR = dirFromAzEl(-38, 24);
 
 export type Waypoint = { pos: THREE.Vector3; target: THREE.Vector3 };
 
 const skyEye = new THREE.Vector3(2.1, 1.55, -1.2);
 
+export const SKY_PORTRAIT: Waypoint = { pos: skyEye, target: skyEye.clone().add(dirFromAzEl(12, 46).multiplyScalar(40)) };
+
 export const WAYPOINTS: Record<"intro" | "overview" | "fire" | "skills" | "sky" | "tent", Waypoint> = {
   intro: { pos: new THREE.Vector3(-6, 9, 17), target: new THREE.Vector3(0, 3.5, -4) },
   overview: { pos: new THREE.Vector3(0.6, 3.3, 9.2), target: new THREE.Vector3(-0.2, 0.9, -0.6) },
-  fire: { pos: new THREE.Vector3(1.6, 1.55, 3.3), target: new THREE.Vector3(0, 0.75, 0) },
-  skills: { pos: new THREE.Vector3(5.4, 1.85, 4.4), target: new THREE.Vector3(3.3, 0.45, 1.7) },
+  fire: { pos: new THREE.Vector3(2.3, 1.9, 4.4), target: new THREE.Vector3(0, 0.8, 0) },
+  skills: { pos: new THREE.Vector3(6.3, 2.3, 5.4), target: new THREE.Vector3(3.2, 0.5, 1.6) },
   sky: { pos: skyEye, target: skyEye.clone().add(SKY_DIR.clone().multiplyScalar(40)) },
-  tent: { pos: new THREE.Vector3(-0.9, 1.9, 2.1), target: new THREE.Vector3(-3.4, 0.9, -2.4) },
+  tent: { pos: new THREE.Vector3(0.4, 2.4, 3.2), target: new THREE.Vector3(-3.5, 0.9, -2.5) },
 };
 
 export function mulberry32(seed: number) {

@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from "react";
-import { Copy, Github, Linkedin, Mail, Send, Shuffle } from "lucide-react";
+import { Copy, Github, Mail, MessageCircle, Phone, Send, Shuffle } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
 import { contact, filterSkills, levelLabel, manifesto, roadmap, skillCategories, skills, type Skill, type SkillCategory } from "../content";
@@ -49,7 +49,7 @@ export function ManifestoSection() {
 
 /* ---------------- Skills ---------------- */
 
-const BOX_H = 210;
+const BOX_H = 240;
 
 function BadgePlayground({ list }: { list: Skill[] }) {
   const box = useRef<HTMLDivElement>(null);
@@ -348,24 +348,47 @@ export function ContactSection() {
         </button>
       </form>
 
-      <div className="grid gap-2 sm:grid-cols-3">
-        <a href={contact.github} target="_blank" rel="noreferrer" className="flex items-center gap-2.5 rounded-xl border bg-card/60 px-3.5 py-3 text-sm font-semibold transition hover:border-foreground/40 hover:bg-card">
-          <Github className="size-4" /> GitHub
-        </a>
-        <a href={contact.linkedin} target="_blank" rel="noreferrer" className="flex items-center gap-2.5 rounded-xl border bg-card/60 px-3.5 py-3 text-sm font-semibold transition hover:border-sky/60 hover:bg-card">
-          <Linkedin className="size-4" /> LinkedIn
-        </a>
-        <button
-          type="button"
-          onClick={() => {
+      <ul className="divide-y overflow-hidden rounded-2xl border bg-card/50">
+        <ContactRow icon={<Github className="size-4" />} label="GitHub" value={`@${contact.githubUser}`} href={contact.github} external />
+        <ContactRow
+          icon={<Mail className="size-4" />}
+          label="E-mail"
+          value={contact.email}
+          href={`mailto:${contact.email}`}
+          onCopy={() => {
             void navigator.clipboard?.writeText(contact.email);
             toast("E-mail copiado", { description: contact.email });
           }}
-          className="flex items-center gap-2.5 rounded-xl border bg-card/60 px-3.5 py-3 text-left text-sm font-semibold transition hover:border-ember/60 hover:bg-card"
-        >
-          <Mail className="size-4" /> E-mail <Copy className="ml-auto size-3.5 text-muted-foreground" />
-        </button>
-      </div>
+        />
+        <ContactRow
+          icon={<Phone className="size-4" />}
+          label="Telefone"
+          value={contact.phone}
+          href={contact.phoneHref}
+          onCopy={() => {
+            void navigator.clipboard?.writeText(contact.phone);
+            toast("Telefone copiado", { description: contact.phone });
+          }}
+        />
+        <ContactRow icon={<MessageCircle className="size-4" />} label="WhatsApp" value="Enviar mensagem" href={contact.whatsapp} external />
+      </ul>
     </div>
+  );
+}
+
+function ContactRow({ icon, label, value, href, external, onCopy }: { icon: React.ReactNode; label: string; value: string; href: string; external?: boolean; onCopy?: () => void }) {
+  return (
+    <li className="group flex items-center gap-3 px-4 py-3 transition hover:bg-card">
+      <span className="grid size-9 shrink-0 place-items-center rounded-xl border bg-background/60 text-ember transition group-hover:border-ember/50">{icon}</span>
+      <a href={href} {...(external ? { target: "_blank", rel: "noreferrer" } : {})} className="min-w-0 flex-1">
+        <span className="block font-mono text-[0.6rem] tracking-[0.18em] text-muted-foreground uppercase">{label}</span>
+        <span className="block truncate text-sm font-semibold group-hover:text-ember">{value}</span>
+      </a>
+      {onCopy && (
+        <button type="button" onClick={onCopy} aria-label={`Copiar ${label.toLowerCase()}`} className="grid size-8 place-items-center rounded-lg text-muted-foreground transition hover:bg-accent hover:text-foreground">
+          <Copy className="size-3.5" />
+        </button>
+      )}
+    </li>
   );
 }

@@ -213,37 +213,92 @@
   to { opacity: 1; transform: none; }
 }
 
-.star-label {
-  font: 500 0.72rem/1 var(--font-mono);
-  letter-spacing: 0.04em;
-  color: var(--star);
-  white-space: nowrap;
-  transform: translateY(16px);
-  text-shadow: 0 0 12px var(--star);
-  animation: star-in 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both;
-  transition: opacity 0.4s;
+.hotspot-pin[data-hidden] {
+  opacity: 0;
+  transform: translateY(8px) scale(0.85);
+  pointer-events: none;
+  animation: none;
 }
-.star-label[data-dim] { opacity: 0.25; }
+.hotspot-pin {
+  transition: padding 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.3s, box-shadow 0.3s, opacity 0.5s, transform 0.5s;
+}
+
+.star-label {
+  --gap: 14px;
+  position: relative;
+  font: 500 0.68rem/1 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: color-mix(in oklab, var(--star) 80%, white);
+  white-space: nowrap;
+  padding: 0.32rem 0.55rem;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--background) 55%, transparent);
+  border: 1px solid color-mix(in oklab, var(--star) 28%, transparent);
+  box-shadow: 0 0 18px -6px var(--star);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  filter: blur(4px);
+  transition: opacity 0.7s ease, filter 0.7s ease, translate 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.star-label.is-top { translate: 0 calc(-50% - var(--gap)); }
+.star-label.is-bottom { translate: 0 calc(50% + var(--gap)); }
+.star-label.is-left { translate: calc(-50% - var(--gap)) 0; }
+.star-label.is-right { translate: calc(50% + var(--gap)) 0; }
+.star-label[data-visible] { opacity: 1; filter: none; }
+.star-label[data-visible][data-dim] { opacity: 0.22; }
+
 .constellation-name {
   display: grid;
   justify-items: center;
-  gap: 0.15rem;
-  font: italic 500 1.35rem/1 var(--font-display);
+  gap: 0.3rem;
+  font: italic 400 1.6rem/1 var(--font-display);
   color: var(--foreground);
   white-space: nowrap;
-  text-shadow: 0 0 24px var(--star);
-  animation: star-in 1.2s 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  text-shadow: 0 0 28px var(--star), 0 2px 12px var(--background);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 .constellation-name span {
-  font: 600 0.6rem/1 var(--font-mono);
+  font: 600 0.58rem/1 var(--font-mono);
   font-style: normal;
   text-transform: uppercase;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.24em;
   color: var(--star);
 }
-@keyframes star-in {
-  from { opacity: 0; filter: blur(6px); }
-  to { opacity: 1; filter: none; }
+.constellation-name[data-visible] { opacity: 1; transform: none; }
+.constellation-name[data-visible][data-dim] { opacity: 0.3; }
+@media (max-width: 639px) {
+  .constellation-name { font-size: 1.05rem; }
+  .constellation-name span { font-size: 0.5rem; }
+  .star-label { font-size: 0.58rem; padding: 0.25rem 0.45rem; --gap: 10px; }
+}
+
+/* Cinematic frame over the canvas */
+.cinematic::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse 75% 70% at 50% 45%, transparent 55%, color-mix(in oklab, var(--background) 75%, transparent) 100%);
+}
+.grain {
+  position: absolute;
+  inset: -50%;
+  pointer-events: none;
+  opacity: 0.07;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  animation: grain 1.2s steps(6) infinite;
+}
+@keyframes grain {
+  0% { transform: translate(0, 0); }
+  20% { transform: translate(-3%, 2%); }
+  40% { transform: translate(2%, -3%); }
+  60% { transform: translate(-2%, -1%); }
+  80% { transform: translate(3%, 3%); }
+  100% { transform: translate(0, 0); }
 }
 
 /* ---------- UI motion ---------- */

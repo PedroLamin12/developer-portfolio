@@ -213,7 +213,7 @@ function Dock() {
       className={cn(
         "absolute bottom-4 left-1/2 z-30 -translate-x-1/2 transition-all duration-700 sm:bottom-6",
         entered ? "opacity-100" : "pointer-events-none translate-y-6 opacity-0",
-        panel && "max-lg:pointer-events-none max-lg:translate-y-24 max-lg:opacity-0",
+        panel && "max-lg:pointer-events-none max-lg:translate-y-24 max-lg:opacity-0 lg:left-[calc(50%-240px)]",
       )}
     >
       <ul className="glass flex items-center gap-1 rounded-full p-1.5">
@@ -234,7 +234,7 @@ function Dock() {
                 )}
               >
                 <Icon className="size-4" />
-                <span className="hidden md:inline">{s.place.replace(/^(A|O) /, "")}</span>
+                <span className={cn("hidden", panel ? "xl:inline" : "md:inline")}>{s.place.replace(/^(A|O) /, "")}</span>
               </button>
             </li>
           );
@@ -270,7 +270,8 @@ function Panel() {
       aria-label={section.title}
       className={cn(
         "glass fixed z-40 flex flex-col transition-all duration-700 ease-[cubic-bezier(0.2,0.8,0.2,1)]",
-        "inset-x-0 bottom-0 max-h-[64dvh] rounded-t-3xl",
+        "inset-x-0 bottom-0 rounded-t-3xl",
+        shown === "sky" ? "max-h-[46dvh]" : "max-h-[64dvh]",
         "lg:inset-x-auto lg:top-20 lg:right-5 lg:bottom-5 lg:max-h-none lg:w-[460px] lg:rounded-3xl",
         open ? "translate-y-0 opacity-100 lg:translate-x-0" : "pointer-events-none translate-y-full opacity-0 lg:translate-x-[110%] lg:translate-y-0",
       )}
