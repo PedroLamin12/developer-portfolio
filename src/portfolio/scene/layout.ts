@@ -27,6 +27,8 @@ export type Waypoint = { pos: THREE.Vector3; target: THREE.Vector3 };
 
 const skyEye = new THREE.Vector3(2.1, 1.55, -1.2);
 
+export const SKY_PORTRAIT: Waypoint = { pos: skyEye, target: skyEye.clone().add(dirFromAzEl(12, 46).multiplyScalar(40)) };
+
 export const WAYPOINTS: Record<"intro" | "overview" | "fire" | "skills" | "sky" | "tent", Waypoint> = {
   intro: { pos: new THREE.Vector3(-6, 9, 17), target: new THREE.Vector3(0, 3.5, -4) },
   overview: { pos: new THREE.Vector3(0.6, 3.3, 9.2), target: new THREE.Vector3(-0.2, 0.9, -0.6) },

@@ -4,7 +4,7 @@ import { Environment, Lightformer, OrbitControls, useGLTF } from "@react-three/d
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import * as THREE from "three";
 import { useCamp, perfStats } from "../store";
-import { WAYPOINTS } from "./layout";
+import { WAYPOINTS, SKY_PORTRAIT } from "./layout";
 import { labelLayer } from "./labelLayer";
 import { SkyDome, Constellations, HORIZON } from "./Sky";
 import { Fire } from "./Fire";
@@ -43,8 +43,10 @@ function CameraRig() {
     a.active = true;
     if (useCamp.getState().snap) {
       // Deep link (?ponto=...): jump straight to the waypoint.
-      a.fromPos.copy(WAYPOINTS[key].pos);
-      a.fromTarget.copy(WAYPOINTS[key].target);
+      const portrait = window.innerWidth / window.innerHeight < 0.8;
+      const wp = key === "sky" && portrait ? SKY_PORTRAIT : WAYPOINTS[key];
+      a.fromPos.copy(wp.pos);
+      a.fromTarget.copy(wp.target);
       a.t = 0.999;
       useCamp.getState().setSnap(false);
     }
@@ -55,7 +57,8 @@ function CameraRig() {
     const c = controls.current;
     if (!c) return;
     const a = anim.current;
-    const wp = WAYPOINTS[key];
+    const portrait = size.width / size.height < 0.8;
+    const wp = key === "sky" && portrait ? SKY_PORTRAIT : WAYPOINTS[key];
 
     if (a.active) {
       a.t = Math.min(1, a.t + dt / a.dur);
@@ -87,7 +90,6 @@ function CameraRig() {
     offset.current.x += (goalX - offset.current.x) * k;
     offset.current.y += (goalY - offset.current.y) * k;
     const cam = camera as THREE.PerspectiveCamera;
-    const portrait = size.width / size.height < 0.8;
     const fov = portrait ? (key === "sky" ? 92 : 62) : 50;
     if (Math.abs(cam.fov - fov) > 0.01) {
       cam.fov += (fov - cam.fov) * (a.active ? 1 - Math.exp(-3 * dt) : 1);
