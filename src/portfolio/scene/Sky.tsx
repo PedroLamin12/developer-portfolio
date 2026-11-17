@@ -1,10 +1,10 @@
 import { useMemo, useRef } from "react";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import { Html } from "@react-three/drei";
 import * as THREE from "three";
 import { roadmap } from "../content";
 import { useCamp } from "../store";
-import { CONSTELLATION_CENTERS, SKY_RADIUS, mulberry32 } from "./layout";
+import { CONSTELLATION_CENTERS, SKY_RADIUS } from "./layout";
 
 const skyVert = /* glsl */ `
 varying vec3 vDir;
@@ -129,23 +129,55 @@ export function SkyDome() {
   );
 }
 
-const COLORS: Record<string, string> = { now: "#ffc46b", exploring: "#5ef2b0", future: "#b993ff" };
+const COLORS: Record<string, string> = { now: "#ffc46b", exploring: "#5ef2b0", future: "#c3a2ff" };
 
-function constellationPoints(center: THREE.Vector3, count: number, seed: number) {
-  // Build a local tangent basis around the center direction and lay stars on a gentle path.
+type Side = "top" | "bottom" | "left" | "right";
+// Hand-drawn figures: offsets in degrees from the constellation center, label side, and edges.
+const FIGURES: Record<string, { stars: [number, number, Side][]; edges: [number, number][] }> = {
+  now: {
+    stars: [
+      [-6.5, -2.5, "left"],
+      [-2.5, 2.5, "top"],
+      [3, 4.5, "top"],
+      [7, 0, "right"],
+      [3, -5, "bottom"],
+      [-3.5, -7.5, "bottom"],
+    ],
+    edges: [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 0], [1, 4]],
+  },
+  exploring: {
+    stars: [
+      [0, 5.5, "top"],
+      [6.5, 0.5, "right"],
+      [-6.5, 0.5, "left"],
+      [0, -5, "bottom"],
+    ],
+    edges: [[0, 1], [1, 3], [3, 2], [2, 0], [0, 3]],
+  },
+  future: {
+    stars: [
+      [5.5, 6.5, "top"],
+      [1, 2.5, "left"],
+      [6.5, -1.5, "right"],
+      [-2, -1.5, "left"],
+      [-6, -6, "bottom"],
+    ],
+    edges: [[4, 3], [3, 1], [1, 0], [0, 2], [2, 1]],
+  },
+};
+
+function figurePoints(center: THREE.Vector3, offsets: [number, number, Side][]) {
   const up = new THREE.Vector3(0, 1, 0);
-  const right = new THREE.Vector3().crossVectors(center, up).normalize().negate();
-  const tUp = new THREE.Vector3().crossVectors(right, center).normalize().negate();
-  const rnd = mulberry32(seed);
-  const pts: THREE.Vector3[] = [];
-  const spread = 0.2;
-  for (let i = 0; i < count; i++) {
-    const u = (i / Math.max(1, count - 1) - 0.5) * spread * 1.15 + (rnd() - 0.5) * 0.03;
-    const v = Math.sin(i * 1.9 + seed) * spread * 0.38 + (rnd() - 0.5) * 0.06;
-    const dir = center.clone().add(right.clone().multiplyScalar(u)).add(tUp.clone().multiplyScalar(v)).normalize();
-    pts.push(dir.multiplyScalar(SKY_RADIUS));
-  }
-  return pts;
+  const right = new THREE.Vector3().crossVectors(up, center).normalize().negate();
+  const tUp = new THREE.Vector3().crossVectors(center, right).normalize().negate();
+  return offsets.map(([u, v]) =>
+    center
+      .clone()
+      .add(right.clone().multiplyScalar(Math.tan(THREE.MathUtils.degToRad(u))))
+      .add(tUp.clone().multiplyScalar(Math.tan(THREE.MathUtils.degToRad(v))))
+      .normalize()
+      .multiplyScalar(SKY_RADIUS),
+  );
 }
 
 const starVert = /* glsl */ `
@@ -154,17 +186,18 @@ attribute float aGroup;
 attribute float aSeed;
 uniform float uTime;
 uniform float uReveal;
-uniform vec3 uHighlight; // per group emphasis
+uniform float uPixel;
+uniform vec3 uHighlight;
 varying vec3 vColor;
 varying float vAlpha;
 void main() {
   vColor = aColor;
   float g = aGroup < 0.5 ? uHighlight.x : aGroup < 1.5 ? uHighlight.y : uHighlight.z;
-  float tw = 0.8 + 0.2 * sin(uTime * 2.0 + aSeed * 30.0);
-  vAlpha = (0.35 + 0.65 * uReveal) * tw * g;
+  float tw = 0.85 + 0.15 * sin(uTime * 2.2 + aSeed * 30.0);
+  vAlpha = (0.3 + 0.7 * uReveal) * tw * g;
   vec4 mv = modelViewMatrix * vec4(position, 1.0);
   gl_Position = projectionMatrix * mv;
-  gl_PointSize = (7.0 + 9.0 * uReveal * g) * tw;
+  gl_PointSize = (9.0 + 15.0 * uReveal * g) * tw * uPixel;
 }`;
 const starFrag = /* glsl */ `
 varying vec3 vColor;
@@ -172,24 +205,56 @@ varying float vAlpha;
 void main() {
   vec2 c = gl_PointCoord - 0.5;
   float d = length(c);
-  float core = 1.0 - smoothstep(0.0, 0.18, d);
-  float halo = (1.0 - smoothstep(0.0, 0.5, d)) * 0.45;
-  float spike = (2.0 - smoothstep(0.0, 0.04, abs(c.x)) - smoothstep(0.0, 0.04, abs(c.y))) * (1.0 - smoothstep(0.1, 0.5, d)) * 0.5;
+  float core = 1.0 - smoothstep(0.0, 0.09, d);
+  float halo = (1.0 - smoothstep(0.0, 0.5, d));
+  halo *= halo * 0.55;
+  float sx = 1.0 - smoothstep(0.0, 0.025, abs(c.x));
+  float sy = 1.0 - smoothstep(0.0, 0.025, abs(c.y));
+  float spike = (sx + sy) * (1.0 - smoothstep(0.05, 0.5, d)) * 0.6;
   float a = (core + halo + spike) * vAlpha;
-  gl_FragColor = vec4(vColor * (1.0 + core), a);
+  gl_FragColor = vec4(mix(vColor, vec3(1.0), core * 0.7), a);
 }`;
+
+const lineVert = /* glsl */ `
+attribute vec3 color;
+attribute float aT;
+varying vec3 vColor;
+varying float vT;
+void main() {
+  vColor = color;
+  vT = aT;
+  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+}`;
+const lineFrag = /* glsl */ `
+uniform float uDraw;
+uniform float uBase;
+varying vec3 vColor;
+varying float vT;
+void main() {
+  float drawn = 1.0 - smoothstep(uDraw - 0.02, uDraw, vT);
+  gl_FragColor = vec4(vColor, uBase + drawn * 0.55);
+}`;
+
+const SIDE_CLASS: Record<Side, string> = { top: "is-top", bottom: "is-bottom", left: "is-left", right: "is-right" };
 
 export function Constellations() {
   const focus = useCamp((s) => s.focus);
   const highlight = useCamp((s) => s.highlight);
   const reveal = useRef(0);
+  const draw = useRef(0);
+  const { gl } = useThree();
 
-  const data = useMemo(() => {
-    return roadmap.map((c, gi) => {
-      const pts = constellationPoints(CONSTELLATION_CENTERS[c.id], c.stars.length, 11 + gi * 7);
-      return { c, gi, pts };
-    });
-  }, []);
+  const data = useMemo(
+    () =>
+      roadmap.map((c, gi) => {
+        const fig = FIGURES[c.id]!;
+        const pts = figurePoints(CONSTELLATION_CENTERS[c.id], fig.stars);
+        const top = Math.max(...fig.stars.map((s) => s[1]));
+        const namePos = figurePoints(CONSTELLATION_CENTERS[c.id], [[0, top + 6, "top"]])[0]!;
+        return { c, gi, fig, pts, namePos };
+      }),
+    [],
+  );
 
   const { starGeo, lineGeo, lineMat, starMat } = useMemo(() => {
     const pos: number[] = [];
@@ -198,18 +263,22 @@ export function Constellations() {
     const seed: number[] = [];
     const lpos: number[] = [];
     const lcol: number[] = [];
-    data.forEach(({ c, gi, pts }) => {
+    const lt: number[] = [];
+    data.forEach(({ c, gi, fig, pts }) => {
       const color = new THREE.Color(COLORS[c.id]);
       pts.forEach((p, i) => {
         pos.push(p.x, p.y, p.z);
         col.push(color.r, color.g, color.b);
         grp.push(gi);
         seed.push(Math.sin(i * 12.9 + gi) * 0.5 + 0.5);
-        const a = pts[i - 1];
-        if (a) {
-          lpos.push(a.x, a.y, a.z, p.x, p.y, p.z);
-          lcol.push(color.r, color.g, color.b, color.r, color.g, color.b);
-        }
+      });
+      fig.edges.forEach(([a, b], e) => {
+        const pa = pts[a]!;
+        const pb = pts[b]!;
+        lpos.push(pa.x, pa.y, pa.z, pb.x, pb.y, pb.z);
+        lcol.push(color.r, color.g, color.b, color.r, color.g, color.b);
+        const n = fig.edges.length;
+        lt.push((gi * 0.12 + (e / n) * 0.76) , (gi * 0.12 + ((e + 1) / n) * 0.76));
       });
     });
     const starGeo = new THREE.BufferGeometry();
@@ -220,58 +289,80 @@ export function Constellations() {
     const lineGeo = new THREE.BufferGeometry();
     lineGeo.setAttribute("position", new THREE.Float32BufferAttribute(lpos, 3));
     lineGeo.setAttribute("color", new THREE.Float32BufferAttribute(lcol, 3));
-    const lineMat = new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.1, depthWrite: false, fog: false, blending: THREE.AdditiveBlending });
+    lineGeo.setAttribute("aT", new THREE.Float32BufferAttribute(lt, 1));
+    const lineMat = new THREE.ShaderMaterial({
+      vertexShader: lineVert,
+      fragmentShader: lineFrag,
+      transparent: true,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+      uniforms: { uDraw: { value: 0 }, uBase: { value: 0.06 } },
+    });
     const starMat = new THREE.ShaderMaterial({
       vertexShader: starVert,
       fragmentShader: starFrag,
       transparent: true,
       depthWrite: false,
       blending: THREE.AdditiveBlending,
-      uniforms: { uTime: { value: 0 }, uReveal: { value: 0 }, uHighlight: { value: new THREE.Vector3(1, 1, 1) } },
+      uniforms: { uTime: { value: 0 }, uReveal: { value: 0 }, uPixel: { value: 1 }, uHighlight: { value: new THREE.Vector3(1, 1, 1) } },
     });
     return { starGeo, lineGeo, lineMat, starMat };
   }, [data]);
 
-  useFrame((state, dt) => {
-    const target = focus === "sky" ? 1 : 0;
-    reveal.current += (target - reveal.current) * (1 - Math.exp(-3 * Math.min(dt, 0.05)));
+  useFrame((state, dtRaw) => {
+    const dt = Math.min(dtRaw, 0.05);
+    const on = focus === "sky";
+    reveal.current += ((on ? 1 : 0) - reveal.current) * (1 - Math.exp(-3 * dt));
+    // Lines draw themselves in once the camera has turned to the sky.
+    draw.current = on ? Math.min(1.05, draw.current + dt * 0.45) : Math.max(0, draw.current - dt * 1.5);
     starMat.uniforms["uTime"]!.value = state.clock.elapsedTime;
     starMat.uniforms["uReveal"]!.value = reveal.current;
+    starMat.uniforms["uPixel"]!.value = gl.getPixelRatio();
+    lineMat.uniforms["uDraw"]!.value = draw.current;
+    lineMat.uniforms["uBase"]!.value = 0.05 + reveal.current * 0.05;
     const hl = starMat.uniforms["uHighlight"]!.value as THREE.Vector3;
-    const ids = ["now", "exploring", "future"];
-    const g = (id: string) => (highlight == null ? 1 : highlight === id ? 1.25 : 0.35);
-    hl.x += (g(ids[0]!) - hl.x) * 0.1;
-    hl.y += (g(ids[1]!) - hl.y) * 0.1;
-    hl.z += (g(ids[2]!) - hl.z) * 0.1;
-    lineMat.opacity = 0.08 + reveal.current * 0.5;
+    const g = (id: string) => (highlight == null ? 1 : highlight === id ? 1.3 : 0.3);
+    hl.x += (g("now") - hl.x) * 0.12;
+    hl.y += (g("exploring") - hl.y) * 0.12;
+    hl.z += (g("future") - hl.z) * 0.12;
   });
 
+  const visible = focus === "sky";
   return (
     <group>
       <points geometry={starGeo} material={starMat} frustumCulled={false} />
       <lineSegments geometry={lineGeo} material={lineMat} frustumCulled={false} />
-      {focus === "sky" &&
-        data.map(({ c, pts }) => (
+      {/* Labels stay mounted and fade with CSS, so toggling the view never unmounts Html roots. */}
+      {data.map(({ c, gi, fig, pts, namePos }) => {
+        const dim = highlight != null && highlight !== c.id;
+        return (
           <group key={c.id}>
             {pts.map((p, i) => (
               <Html key={i} position={p} center zIndexRange={[20, 10]} style={{ pointerEvents: "none" }}>
                 <div
-                  className="star-label"
-                  data-dim={highlight != null && highlight !== c.id ? "" : undefined}
-                  style={{ ["--star" as string]: COLORS[c.id], animationDelay: `${i * 90}ms` }}
+                  className={`star-label ${SIDE_CLASS[fig.stars[i]![2]]}`}
+                  data-visible={visible ? "" : undefined}
+                  data-dim={dim ? "" : undefined}
+                  style={{ ["--star" as string]: COLORS[c.id], transitionDelay: visible ? `${900 + gi * 250 + i * 80}ms` : "0ms" }}
                 >
                   {c.stars[i]?.label}
                 </div>
               </Html>
             ))}
-            <Html position={(pts[Math.floor(pts.length / 2)] ?? new THREE.Vector3()).clone().add(new THREE.Vector3(0, 13, 0))} center zIndexRange={[20, 10]} style={{ pointerEvents: "none" }}>
-              <div className="constellation-name" style={{ ["--star" as string]: COLORS[c.id] }}>
+            <Html position={namePos} center zIndexRange={[20, 10]} style={{ pointerEvents: "none" }}>
+              <div
+                className="constellation-name"
+                data-visible={visible ? "" : undefined}
+                data-dim={dim ? "" : undefined}
+                style={{ ["--star" as string]: COLORS[c.id], transitionDelay: visible ? `${700 + gi * 250}ms` : "0ms" }}
+              >
                 <span>{c.stage}</span>
                 {c.name}
               </div>
             </Html>
           </group>
-        ))}
+        );
+      })}
     </group>
   );
 }

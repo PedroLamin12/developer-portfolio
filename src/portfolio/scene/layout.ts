@@ -16,11 +16,12 @@ function dirFromAzEl(azDeg: number, elDeg: number) {
 
 export const SKY_RADIUS = 95;
 export const CONSTELLATION_CENTERS = {
-  now: dirFromAzEl(-16, 40),
-  exploring: dirFromAzEl(4, 52),
-  future: dirFromAzEl(22, 40),
+  now: dirFromAzEl(-12, 39),
+  exploring: dirFromAzEl(7, 55),
+  future: dirFromAzEl(27, 38),
 } as const;
-export const SKY_DIR = dirFromAzEl(3, 45);
+export const SKY_DIR = dirFromAzEl(7, 45);
+export const MOON_DIR = dirFromAzEl(-38, 24);
 
 export type Waypoint = { pos: THREE.Vector3; target: THREE.Vector3 };
 
