@@ -12,6 +12,8 @@ type CampState = {
   hovered: SectionId | null;
   highlight: Constellation["id"] | null;
   showStats: boolean;
+  snap: boolean;
+  setSnap: (s: boolean) => void;
   setFocus: (f: Focus) => void;
   enter: () => void;
   setReady: (r: boolean) => void;
@@ -30,6 +32,8 @@ export const useCamp = create<CampState>((set) => ({
   hovered: null,
   highlight: null,
   showStats: false,
+  snap: false,
+  setSnap: (snap) => set({ snap }),
   setFocus: (focus) =>
     set((s) => ({ focus, entered: true, lanternLit: s.lanternLit || focus === "tent" })),
   enter: () => set({ entered: true }),

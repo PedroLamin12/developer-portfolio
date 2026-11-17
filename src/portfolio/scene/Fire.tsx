@@ -39,13 +39,13 @@ void main() {
   vec2 c = gl_PointCoord - 0.5;
   float d = length(c);
   float soft = 1.0 - smoothstep(0.0, 0.5, d);
-  vec3 hot = vec3(1.0, 0.92, 0.65);
+  vec3 hot = vec3(1.0, 0.78, 0.4);
   vec3 mid = vec3(1.0, 0.55, 0.12);
   vec3 cool = vec3(0.85, 0.16, 0.04);
   vec3 col = mix(hot, mid, smoothstep(0.0, 0.35, vLife));
   col = mix(col, cool, smoothstep(0.35, 0.85, vLife));
   float a = soft * soft * (1.0 - smoothstep(0.55, 1.0, vLife)) * smoothstep(0.0, 0.06, vLife);
-  gl_FragColor = vec4(col * 1.4, a * 0.55);
+  gl_FragColor = vec4(col, a * 0.32);
 }`;
 
 const emberVert = /* glsl */ `
@@ -114,7 +114,7 @@ export function Fire() {
       emberGeo: seeds(EMBER_COUNT, 99),
       flameMat: new THREE.ShaderMaterial({ ...common, vertexShader: flameVert, fragmentShader: flameFrag, uniforms: { uTime: { value: 0 }, uScale: { value: 800 } } }),
       emberMat: new THREE.ShaderMaterial({ ...common, vertexShader: emberVert, fragmentShader: emberFrag, uniforms: { uTime: { value: 0 }, uScale: { value: 800 } } }),
-      glowMap: radialTexture([[0, "rgba(255,170,80,0.9)"], [0.25, "rgba(255,110,30,0.35)"], [1, "rgba(255,80,10,0)"]]),
+      glowMap: radialTexture([[0, "rgba(255,150,60,0.55)"], [0.3, "rgba(255,100,30,0.2)"], [1, "rgba(255,80,10,0)"]]),
       poolMap: radialTexture([[0, "rgba(255,140,60,0.55)"], [0.35, "rgba(255,90,30,0.18)"], [1, "rgba(255,60,10,0)"]]),
     };
   }, []);

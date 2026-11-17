@@ -39,6 +39,13 @@ function CameraRig() {
     const dist = a.fromPos.distanceTo(WAYPOINTS[key].pos);
     a.dur = key === "overview" && a.fromPos.y > 6 ? 3.2 : THREE.MathUtils.clamp(1.1 + dist * 0.12, 1.2, 2.2);
     a.active = true;
+    if (useCamp.getState().snap) {
+      // Deep link (?ponto=...): jump straight to the waypoint.
+      a.fromPos.copy(WAYPOINTS[key].pos);
+      a.fromTarget.copy(WAYPOINTS[key].target);
+      a.t = 0.999;
+      useCamp.getState().setSnap(false);
+    }
   }, [key, camera]);
 
   useFrame((state, dtRaw) => {

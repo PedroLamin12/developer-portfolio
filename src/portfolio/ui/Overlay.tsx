@@ -374,6 +374,17 @@ export function Overlay() {
   }, [muted]);
 
   useEffect(() => {
+    // Deep links such as /?ponto=fogueira open a point of interest directly.
+    const map: Record<string, Focus> = { fogueira: "fire", ferramentas: "skills", ceu: "sky", contato: "tent", clareira: "overview" };
+    const p = new URLSearchParams(window.location.search).get("ponto");
+    const target = p ? map[p] : undefined;
+    if (target) {
+      useCamp.getState().setSnap(true);
+      useCamp.getState().setFocus(target);
+    }
+  }, []);
+
+  useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const tag = (e.target as HTMLElement)?.tagName;
       if (tag === "INPUT" || tag === "TEXTAREA") return;

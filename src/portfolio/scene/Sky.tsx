@@ -82,20 +82,18 @@ void main() {
 
   // Aurora: projected onto a curved ceiling, strongest towards -Z (north).
   if (h > 0.0) {
-    vec2 p = d.xz / (h + 0.18) * 1.6;
+    vec2 p = vec2(d.x, -d.z) / (h + 0.18) * 1.6;
     float north = 1.0 - smoothstep(-0.9, 0.6, d.z);
-    float a = curtain(p, 1.2, 0.025, t) + curtain(p + vec2(3.1, 0.0), 2.6, -0.018, t) * 0.7;
+    float a = curtain(p, 2.3, 0.025, t) + curtain(p + vec2(3.1, 0.0), 3.9, -0.018, t) * 0.8;
     float fade = smoothstep(0.02, 0.22, h) * (1.0 - smoothstep(0.7, 0.98, h));
     vec3 green = vec3(0.15, 0.95, 0.55);
     vec3 teal = vec3(0.1, 0.65, 0.75);
     vec3 violet = vec3(0.6, 0.25, 0.95);
     vec3 ac = mix(green, teal, smoothstep(0.1, 0.3, h));
     ac = mix(ac, violet, smoothstep(0.25, 0.6, h));
-    col += ac * a * fade * north * 0.55;
+    col += ac * a * fade * north * 1.15;
   }
 
-  // Soft glow of the fire on the low haze.
-  col += vec3(0.25, 0.09, 0.02) * exp(-max(h, 0.0) * 14.0) * 0.35;
 
   gl_FragColor = vec4(col, 1.0);
   #include <tonemapping_fragment>

@@ -106,7 +106,7 @@ function useForest() {
     const shrooms: Instance[] = [];
     for (let i = 0; i < 18; i++) {
       const a = rnd() * Math.PI * 2;
-      const r = 6 + rnd() * 14;
+      const r = 7.5 + rnd() * 14;
       const x = Math.cos(a) * r;
       const z = Math.sin(a) * r;
       if (z > 5 && Math.abs(x) < 3) continue;
@@ -134,7 +134,7 @@ export function Forest() {
       <Instances url={pineB.url} size={7.2} items={f.groups[1]} />
       <Instances url={pineRound.url} size={5.4} items={f.groups[2]} />
       <Instances url={pineDefault.url} size={6.2} items={f.groups[3]} />
-      <Instances url={rockLarge.url} size={1.1} items={f.rocks} />
+      <Instances url={rockLarge.url} size={0.7} items={f.rocks} />
       <Instances url={rockSmall.url} size={0.45} items={f.smallRocks} />
       <Instances url={grassModel.url} size={0.35} items={f.grass} />
       <Instances url={mushroomsModel.url} size={0.32} items={f.shrooms} />
