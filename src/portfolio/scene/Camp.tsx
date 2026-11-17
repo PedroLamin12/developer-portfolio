@@ -214,7 +214,7 @@ function Hotspot({ id, children, markerY, position, hit }: { id: SectionId; chil
     }
     if (ring.current) {
       const m = ring.current.material as THREE.MeshBasicMaterial;
-      const goal = hovered ? 0.9 : focus === id ? 0.35 : 0.0;
+      const goal = hovered && focus !== id ? 0.8 : 0.0;
       m.opacity = THREE.MathUtils.lerp(m.opacity, goal + Math.sin(state.clock.elapsedTime * 3) * 0.05 * goal, k);
     }
   });

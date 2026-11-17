@@ -49,7 +49,7 @@ export function ManifestoSection() {
 
 /* ---------------- Skills ---------------- */
 
-const BOX_H = 210;
+const BOX_H = 240;
 
 function BadgePlayground({ list }: { list: Skill[] }) {
   const box = useRef<HTMLDivElement>(null);

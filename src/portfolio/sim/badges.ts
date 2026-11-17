@@ -29,8 +29,9 @@ export function createWorld(width: number, height: number, sizes: { id: string; 
     id: b.id,
     w: b.w,
     h: b.h,
-    x: Math.min(width - b.w / 2, Math.max(b.w / 2, b.w / 2 + rnd() * (width - b.w))),
-    y: -b.h * (1 + i * 1.2),
+    // Spread the drop across the width in staggered columns so the pile settles wide, not tall.
+    x: Math.min(width - b.w / 2, Math.max(b.w / 2, ((i % 3) + 0.5) * (width / 3) + (rnd() - 0.5) * 30)),
+    y: b.h / 2 + Math.floor(i / 3) * -b.h * 1.4,
     vx: (rnd() - 0.5) * 200,
     vy: 0,
     dragged: false,
@@ -68,6 +69,10 @@ function walls(b: Body, width: number, height: number, dt: number) {
   if (b.x + hw > width) {
     b.x = width - hw;
     if (b.vx > 0) b.vx = -b.vx * RESTITUTION;
+  }
+  if (b.y - hh < -height * 0.5) {
+    b.y = hh - height * 0.5;
+    if (b.vy < 0) b.vy = 0;
   }
   if (b.y + hh > height) {
     b.y = height - hh;

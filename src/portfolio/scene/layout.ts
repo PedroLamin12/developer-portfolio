@@ -31,7 +31,7 @@ export const WAYPOINTS: Record<"intro" | "overview" | "fire" | "skills" | "sky" 
   intro: { pos: new THREE.Vector3(-6, 9, 17), target: new THREE.Vector3(0, 3.5, -4) },
   overview: { pos: new THREE.Vector3(0.6, 3.3, 9.2), target: new THREE.Vector3(-0.2, 0.9, -0.6) },
   fire: { pos: new THREE.Vector3(1.6, 1.55, 3.3), target: new THREE.Vector3(0, 0.75, 0) },
-  skills: { pos: new THREE.Vector3(5.4, 1.85, 4.4), target: new THREE.Vector3(3.3, 0.45, 1.7) },
+  skills: { pos: new THREE.Vector3(6.3, 2.3, 5.4), target: new THREE.Vector3(3.2, 0.5, 1.6) },
   sky: { pos: skyEye, target: skyEye.clone().add(SKY_DIR.clone().multiplyScalar(40)) },
   tent: { pos: new THREE.Vector3(0.4, 2.4, 3.2), target: new THREE.Vector3(-3.5, 0.9, -2.5) },
 };
