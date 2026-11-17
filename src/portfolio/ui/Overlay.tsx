@@ -234,7 +234,7 @@ function Dock() {
                 )}
               >
                 <Icon className="size-4" />
-                <span className="hidden md:inline">{s.place.replace(/^(A|O) /, "")}</span>
+                <span className={cn("hidden", panel ? "xl:inline" : "md:inline")}>{s.place.replace(/^(A|O) /, "")}</span>
               </button>
             </li>
           );
