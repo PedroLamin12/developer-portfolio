@@ -33,7 +33,7 @@ export const WAYPOINTS: Record<"intro" | "overview" | "fire" | "skills" | "sky" 
   fire: { pos: new THREE.Vector3(1.6, 1.55, 3.3), target: new THREE.Vector3(0, 0.75, 0) },
   skills: { pos: new THREE.Vector3(5.4, 1.85, 4.4), target: new THREE.Vector3(3.3, 0.45, 1.7) },
   sky: { pos: skyEye, target: skyEye.clone().add(SKY_DIR.clone().multiplyScalar(40)) },
-  tent: { pos: new THREE.Vector3(-0.9, 1.9, 2.1), target: new THREE.Vector3(-3.4, 0.9, -2.4) },
+  tent: { pos: new THREE.Vector3(0.4, 2.4, 3.2), target: new THREE.Vector3(-3.5, 0.9, -2.5) },
 };
 
 export function mulberry32(seed: number) {

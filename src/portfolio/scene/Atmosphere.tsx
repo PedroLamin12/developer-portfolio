@@ -299,7 +299,7 @@ export function Mist() {
           renderOrder={2}
         >
           <planeGeometry args={[p.s, p.s]} />
-          <meshBasicMaterial map={tex} transparent depthWrite={false} opacity={0.55} />
+          <meshBasicMaterial map={tex} transparent depthWrite={false} opacity={0.4} />
         </mesh>
       ))}
     </group>
