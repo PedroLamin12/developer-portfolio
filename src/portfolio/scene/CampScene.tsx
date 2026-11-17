@@ -5,6 +5,7 @@ import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import * as THREE from "three";
 import { useCamp, perfStats } from "../store";
 import { WAYPOINTS } from "./layout";
+import { labelLayer } from "./labelLayer";
 import { SkyDome, Constellations, HORIZON } from "./Sky";
 import { Fire } from "./Fire";
 import { Ground, Forest, CampProps, Hotspots, MODEL_URLS } from "./Camp";
@@ -196,6 +197,7 @@ export default function CampScene() {
         <CameraRig />
         <Stats />
       </Canvas>
+      <div ref={labelLayer} className="pointer-events-none absolute inset-0 z-10" />
       <div className="grain" aria-hidden />
     </div>
   );

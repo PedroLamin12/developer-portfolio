@@ -2,6 +2,7 @@ import { useMemo, useRef } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import { Html } from "@react-three/drei";
 import * as THREE from "three";
+import { labelLayer } from "./labelLayer";
 import { roadmap } from "../content";
 import { useCamp } from "../store";
 import { CONSTELLATION_CENTERS, SKY_RADIUS } from "./layout";
@@ -136,14 +137,14 @@ type Side = "top" | "bottom" | "left" | "right";
 const FIGURES: Record<string, { stars: [number, number, Side][]; edges: [number, number][] }> = {
   now: {
     stars: [
-      [-6.5, -2.5, "left"],
+      [-6.5, -2.5, "bottom"],
       [-2.5, 2.5, "top"],
       [3, 4.5, "top"],
       [7, 0, "right"],
       [3, -5, "bottom"],
       [-3.5, -7.5, "bottom"],
     ],
-    edges: [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 0], [1, 4]],
+    edges: [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 0]],
   },
   exploring: {
     stars: [
@@ -158,7 +159,7 @@ const FIGURES: Record<string, { stars: [number, number, Side][]; edges: [number,
     stars: [
       [5.5, 6.5, "top"],
       [1, 2.5, "left"],
-      [6.5, -1.5, "right"],
+      [6.5, -1.5, "bottom"],
       [-2, -1.5, "left"],
       [-6, -6, "bottom"],
     ],
@@ -250,7 +251,7 @@ export function Constellations() {
         const fig = FIGURES[c.id]!;
         const pts = figurePoints(CONSTELLATION_CENTERS[c.id], fig.stars);
         const top = Math.max(...fig.stars.map((s) => s[1]));
-        const namePos = figurePoints(CONSTELLATION_CENTERS[c.id], [[0, top + 6, "top"]])[0]!;
+        const namePos = figurePoints(CONSTELLATION_CENTERS[c.id], [[0, top + 4.2, "top"]])[0]!;
         return { c, gi, fig, pts, namePos };
       }),
     [],
@@ -338,7 +339,7 @@ export function Constellations() {
         return (
           <group key={c.id}>
             {pts.map((p, i) => (
-              <Html key={i} position={p} center zIndexRange={[20, 10]} style={{ pointerEvents: "none" }}>
+              <Html portal={labelLayer} key={i} position={p} center zIndexRange={[20, 10]} style={{ pointerEvents: "none" }}>
                 <div
                   className={`star-label ${SIDE_CLASS[fig.stars[i]![2]]}`}
                   data-visible={visible ? "" : undefined}
@@ -349,7 +350,7 @@ export function Constellations() {
                 </div>
               </Html>
             ))}
-            <Html position={namePos} center zIndexRange={[20, 10]} style={{ pointerEvents: "none" }}>
+            <Html portal={labelLayer} position={namePos} center zIndexRange={[20, 10]} style={{ pointerEvents: "none" }}>
               <div
                 className="constellation-name"
                 data-visible={visible ? "" : undefined}

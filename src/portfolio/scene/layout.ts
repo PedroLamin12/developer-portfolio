@@ -16,9 +16,9 @@ function dirFromAzEl(azDeg: number, elDeg: number) {
 
 export const SKY_RADIUS = 95;
 export const CONSTELLATION_CENTERS = {
-  now: dirFromAzEl(-12, 39),
-  exploring: dirFromAzEl(7, 55),
-  future: dirFromAzEl(27, 38),
+  now: dirFromAzEl(-6, 37),
+  exploring: dirFromAzEl(9, 51),
+  future: dirFromAzEl(24, 36),
 } as const;
 export const SKY_DIR = dirFromAzEl(7, 45);
 export const MOON_DIR = dirFromAzEl(-38, 24);

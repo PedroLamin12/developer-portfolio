@@ -2,6 +2,7 @@ import { useMemo, useRef, useState, type ReactNode } from "react";
 import { useFrame, type ThreeEvent } from "@react-three/fiber";
 import { Html } from "@react-three/drei";
 import * as THREE from "three";
+import { labelLayer } from "./labelLayer";
 import tentModel from "@/assets/models/tent.glb.asset.json";
 import stonesModel from "@/assets/models/campfire-stones.glb.asset.json";
 import logsModel from "@/assets/models/campfire-logs.glb.asset.json";
@@ -250,7 +251,7 @@ function Hotspot({ id, children, markerY, position, hit }: { id: SectionId; chil
       </mesh>
       {/* Always mounted; hidden with CSS so Html roots never unmount mid-render. */}
       {(
-        <Html position={[0, markerY, 0]} center zIndexRange={[30, 20]}>
+        <Html portal={labelLayer} position={[0, markerY, 0]} center zIndexRange={[30, 20]}>
           <button
             type="button"
             className="hotspot-pin"
