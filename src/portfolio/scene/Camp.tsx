@@ -216,11 +216,14 @@ function Hotspot({ id, children, markerY, position, hit }: { id: SectionId; chil
         <ringGeometry args={[0.95, 1.12, 48]} />
         <meshBasicMaterial color="#ffc27a" transparent opacity={0} depthWrite={false} blending={THREE.AdditiveBlending} />
       </mesh>
-      {entered && focus === "overview" && (
+      {/* Always mounted; hidden with CSS so Html roots never unmount mid-render. */}
+      {(
         <Html position={[0, markerY, 0]} center zIndexRange={[30, 20]}>
           <button
             type="button"
             className="hotspot-pin"
+            tabIndex={entered && focus === "overview" ? 0 : -1}
+            data-hidden={entered && focus === "overview" ? undefined : ""}
             data-active={hovered ? "" : undefined}
             onClick={() => setFocus(id)}
             onPointerEnter={() => setHovered(id)}
