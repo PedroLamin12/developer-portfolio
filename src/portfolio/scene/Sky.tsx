@@ -157,7 +157,7 @@ const FIGURES: Record<string, { stars: [number, number, Side][]; edges: [number,
   },
   future: {
     stars: [
-      [5.5, 6.5, "top"],
+      [5.5, 6.5, "right"],
       [1, 2.5, "left"],
       [6.5, -1.5, "bottom"],
       [-2, -1.5, "left"],
