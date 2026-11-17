@@ -186,7 +186,7 @@ export function CampProps() {
       <Model url={logStackModel.url} size={1.4} fit="width" position={[-6.1, 0, -1.2]} rotation={1.3} />
       <Model url={bedrollModel.url} size={1.5} fit="width" position={[-2.0, 0, -3.7]} rotation={0.5} />
       <Model url={bucketModel.url} size={0.42} position={[4.4, 0, 0.6]} rotation={0.4} />
-      <Model url={signpostModel.url} size={1.7} position={[2.6, 0, 6.6]} rotation={-0.5} />
+      <Model url={signpostModel.url} size={1.6} position={[-3.4, 0, 4.6]} rotation={0.5} />
       {seats.map((s, i) => (
         <Model key={i} url={logSeat.url} size={1.45} fit="width" position={[Math.cos(s.a) * s.r, 0, Math.sin(s.a) * s.r]} rotation={-s.a + Math.PI / 2} />
       ))}

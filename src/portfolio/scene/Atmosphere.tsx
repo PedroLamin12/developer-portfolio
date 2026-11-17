@@ -255,11 +255,19 @@ export function Mist() {
       const y = s / 2 + (rnd() - 0.5) * s * 0.55;
       const r = 30 + rnd() * 60;
       const grad = g.createRadialGradient(x, y, 0, x, y, r);
-      grad.addColorStop(0, "rgba(170,190,230,0.16)");
-      grad.addColorStop(1, "rgba(170,190,230,0)");
+      grad.addColorStop(0, "rgba(130,150,200,0.09)");
+      grad.addColorStop(1, "rgba(130,150,200,0)");
       g.fillStyle = grad;
       g.fillRect(0, 0, s, s);
     }
+    // Feather the edges so no plane border is ever visible.
+    g.globalCompositeOperation = "destination-in";
+    const mask = g.createRadialGradient(s / 2, s / 2, 0, s / 2, s / 2, s / 2);
+    mask.addColorStop(0, "rgba(0,0,0,1)");
+    mask.addColorStop(0.6, "rgba(0,0,0,0.6)");
+    mask.addColorStop(1, "rgba(0,0,0,0)");
+    g.fillStyle = mask;
+    g.fillRect(0, 0, s, s);
     const t = new THREE.CanvasTexture(c);
     t.colorSpace = THREE.SRGBColorSpace;
     return t;
@@ -268,7 +276,7 @@ export function Mist() {
     const rnd = mulberry32(12);
     return Array.from({ length: 9 }, (_, i) => {
       const a = (i / 9) * Math.PI * 2 + rnd() * 0.5;
-      const d = 10 + rnd() * 9;
+      const d = 11 + rnd() * 10;
       return { x: Math.cos(a) * d, z: Math.sin(a) * d, s: 14 + rnd() * 10, y: 0.25 + rnd() * 0.6, rot: rnd() * 6, speed: (rnd() - 0.5) * 0.02 };
     });
   }, []);
@@ -291,7 +299,7 @@ export function Mist() {
           renderOrder={2}
         >
           <planeGeometry args={[p.s, p.s]} />
-          <meshBasicMaterial map={tex} transparent depthWrite={false} opacity={0.9} />
+          <meshBasicMaterial map={tex} transparent depthWrite={false} opacity={0.55} />
         </mesh>
       ))}
     </group>
