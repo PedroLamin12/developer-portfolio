@@ -163,7 +163,7 @@ export function CampProps() {
 
 /* ---------------- Hotspots ---------------- */
 
-function Hotspot({ id, children, markerY, position }: { id: SectionId; children: ReactNode; markerY: number; position: THREE.Vector3 }) {
+function Hotspot({ id, children, markerY, position, hit }: { id: SectionId; children: ReactNode; markerY: number; position: THREE.Vector3; hit: [number, number] }) {
   const setFocus = useCamp((s) => s.setFocus);
   const setHovered = useCamp((s) => s.setHovered);
   const hovered = useCamp((s) => s.hovered === id);
@@ -208,6 +208,9 @@ function Hotspot({ id, children, markerY, position }: { id: SectionId; children:
         }}
       >
         {children}
+        <mesh position={[0, hit[1] / 2, 0]} visible={false}>
+          <cylinderGeometry args={[hit[0], hit[0], hit[1], 10]} />
+        </mesh>
       </group>
       <mesh ref={ring} rotation-x={-Math.PI / 2} position={[0, 0.03, 0]}>
         <ringGeometry args={[0.95, 1.12, 48]} />
@@ -239,20 +242,17 @@ function Hotspot({ id, children, markerY, position }: { id: SectionId; children:
 export function Hotspots() {
   return (
     <>
-      <Hotspot id="fire" position={new THREE.Vector3(0, 0, 0)} markerY={2.1}>
-        {/* Invisible hit volume over the fire */}
-        <mesh position={[0, 0.7, 0]} visible={false}>
-          <cylinderGeometry args={[0.8, 0.8, 1.6, 12]} />
-        </mesh>
+      <Hotspot id="fire" position={new THREE.Vector3(0, 0, 0)} markerY={2.1} hit={[0.85, 1.6]}>
+        {null}
       </Hotspot>
-      <Hotspot id="skills" position={CHEST} markerY={1.35}>
+      <Hotspot id="skills" position={CHEST} markerY={1.35} hit={[0.75, 0.9]}>
         <Model url={chestModel.url} size={0.95} fit="width" rotation={-2.1} />
         <Model url={axeModel.url} size={0.8} position={[0.62, 0, 0.2]} rotation={0.6} />
       </Hotspot>
-      <Hotspot id="sky" position={TELESCOPE} markerY={2.2}>
+      <Hotspot id="sky" position={TELESCOPE} markerY={2.2} hit={[0.5, 1.8]}>
         <Telescope />
       </Hotspot>
-      <Hotspot id="tent" position={TENT} markerY={3}>
+      <Hotspot id="tent" position={TENT} markerY={3} hit={[1.5, 2.2]}>
         <Model url={tentModel.url} size={2.9} fit="width" rotation={0.9} />
         <group position={[LANTERN.x - TENT.x, 0, LANTERN.z - TENT.z]}>
           <Model url={stumpModel.url} size={0.5} />
