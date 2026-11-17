@@ -52,7 +52,7 @@ vec3 stars(vec3 d, float scale, float threshold, float t) {
   vec3 off = vec3(hash13(c + 1.7), hash13(c + 4.1), hash13(c + 7.3)) - 0.5;
   float dist = length(f - off * 0.6);
   float size = 0.07 + 0.08 * hash13(c + 9.9);
-  float s = smoothstep(size, 0.0, dist);
+  float s = 1.0 - smoothstep(0.0, size, dist);
   float tw = 0.65 + 0.35 * sin(t * (1.0 + 3.0 * hash13(c + 2.2)) + h * 40.0);
   vec3 tint = mix(vec3(0.75, 0.85, 1.0), vec3(1.0, 0.9, 0.75), hash13(c + 5.5));
   return tint * s * tw * (0.6 + 1.6 * (h - threshold) / (1.0 - threshold));
@@ -61,8 +61,8 @@ vec3 stars(vec3 d, float scale, float threshold, float t) {
 float curtain(vec2 p, float offset, float speed, float t) {
   float n = fbm(vec2(p.x * 0.35 + t * speed, offset));
   float line = p.y - (offset + sin(p.x * 0.45 + t * 0.07 + offset * 3.0) * 0.9 + (n - 0.5) * 2.6);
-  float band = exp(-line * line * 1.6) ;
-  float top = smoothstep(-0.2, 1.6, -line) * 0.0 + smoothstep(1.8, 0.0, abs(line + 0.6));
+  float band = exp(-line * line * 1.6);
+  float top = 1.0 - smoothstep(0.0, 1.8, abs(line + 0.6));
   float rays = 0.55 + 0.45 * fbm(vec2(p.x * 3.2 + t * speed * 4.0, t * 0.05));
   return (band * 0.8 + top * 0.35) * rays;
 }
@@ -83,7 +83,7 @@ void main() {
   // Aurora: projected onto a curved ceiling, strongest towards -Z (north).
   if (h > 0.0) {
     vec2 p = d.xz / (h + 0.18) * 1.6;
-    float north = smoothstep(0.6, -0.9, d.z);
+    float north = 1.0 - smoothstep(-0.9, 0.6, d.z);
     float a = curtain(p, 1.2, 0.025, t) + curtain(p + vec2(3.1, 0.0), 2.6, -0.018, t) * 0.7;
     float fade = smoothstep(0.02, 0.22, h) * (1.0 - smoothstep(0.7, 0.98, h));
     vec3 green = vec3(0.15, 0.95, 0.55);
@@ -173,9 +173,9 @@ varying float vAlpha;
 void main() {
   vec2 c = gl_PointCoord - 0.5;
   float d = length(c);
-  float core = smoothstep(0.18, 0.0, d);
-  float halo = smoothstep(0.5, 0.0, d) * 0.45;
-  float spike = (smoothstep(0.04, 0.0, abs(c.x)) + smoothstep(0.04, 0.0, abs(c.y))) * smoothstep(0.5, 0.1, d) * 0.5;
+  float core = 1.0 - smoothstep(0.0, 0.18, d);
+  float halo = (1.0 - smoothstep(0.0, 0.5, d)) * 0.45;
+  float spike = (2.0 - smoothstep(0.0, 0.04, abs(c.x)) - smoothstep(0.0, 0.04, abs(c.y))) * (1.0 - smoothstep(0.1, 0.5, d)) * 0.5;
   float a = (core + halo + spike) * vAlpha;
   gl_FragColor = vec4(vColor * (1.0 + core), a);
 }`;
