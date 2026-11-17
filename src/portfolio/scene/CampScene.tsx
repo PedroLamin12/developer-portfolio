@@ -66,7 +66,7 @@ function CameraRig() {
     c.maxPolarAngle = relaxed ? Math.PI : Math.PI * 0.47;
     c.enableRotate = entered && key !== "sky";
     c.enableZoom = entered && key !== "sky";
-    c.autoRotate = key === "intro" || (key === "overview" && !a.active && state.clock.elapsedTime - lastInput.current > IDLE_BEFORE_DRIFT);
+    c.autoRotate = key === "intro" || (key === "overview" && !a.active && performance.now() / 1000 - lastInput.current > IDLE_BEFORE_DRIFT);
     c.autoRotateSpeed = key === "intro" ? 0.6 : 0.25;
 
     // Shift the framing so the focused object sits beside the open panel.
@@ -104,17 +104,11 @@ function CameraRig() {
         anim.current.active = false;
         lastInput.current = Number.POSITIVE_INFINITY;
       }}
-      onEnd={(e) => {
-        void e;
+      onEnd={() => {
         lastInput.current = performance.now() / 1000;
       }}
     />
   );
-}
-
-function ClockSync() {
-  // OrbitControls idle timer uses state.clock; keep lastInput in that clock domain.
-  return null;
 }
 
 function ReadySignal() {
@@ -186,7 +180,6 @@ export default function CampScene() {
           <ReadySignal />
         </Suspense>
         <CameraRig />
-        <ClockSync />
         <Stats />
       </Canvas>
     </div>
