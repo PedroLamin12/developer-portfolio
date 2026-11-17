@@ -1,4 +1,4 @@
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import { Html } from "@react-three/drei";
 import * as THREE from "three";
@@ -240,10 +240,19 @@ const SIDE_CLASS: Record<Side, string> = { top: "is-top", bottom: "is-bottom", l
 
 export function Constellations() {
   const focus = useCamp((s) => s.focus);
-  const highlight = useCamp((s) => s.highlight);
+  const userHighlight = useCamp((s) => s.highlight);
   const reveal = useRef(0);
   const draw = useRef(0);
-  const { gl } = useThree();
+  const { gl, size } = useThree();
+  // Small screens: show one constellation's star names at a time, cycling slowly.
+  const compact = size.width < 640;
+  const [auto, setAuto] = useState(0);
+  useEffect(() => {
+    if (!compact || focus !== "sky") return;
+    const id = setInterval(() => setAuto((a) => (a + 1) % roadmap.length), 3800);
+    return () => clearInterval(id);
+  }, [compact, focus]);
+  const highlight = userHighlight ?? (compact && focus === "sky" ? roadmap[auto]!.id : null);
 
   const data = useMemo(
     () =>
@@ -342,9 +351,9 @@ export function Constellations() {
               <Html portal={labelLayer} key={i} position={p} center zIndexRange={[20, 10]} style={{ pointerEvents: "none" }}>
                 <div
                   className={`star-label ${SIDE_CLASS[fig.stars[i]![2]]}`}
-                  data-visible={visible ? "" : undefined}
+                  data-visible={visible && (!compact || !dim) ? "" : undefined}
                   data-dim={dim ? "" : undefined}
-                  style={{ ["--star" as string]: COLORS[c.id], transitionDelay: visible ? `${900 + gi * 250 + i * 80}ms` : "0ms" }}
+                  style={{ ["--star" as string]: COLORS[c.id], transitionDelay: visible ? `${compact ? i * 60 : 900 + gi * 250 + i * 80}ms` : "0ms" }}
                 >
                   {c.stars[i]?.label}
                 </div>

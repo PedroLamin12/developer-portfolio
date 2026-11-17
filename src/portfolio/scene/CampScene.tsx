@@ -82,7 +82,7 @@ function CameraRig() {
     const panel = entered && key !== "overview" && key !== "intro";
     const desktop = size.width >= 1024;
     const goalX = panel && desktop ? Math.min(260, size.width * 0.2) : 0;
-    const goalY = panel && !desktop ? size.height * (key === "sky" ? 0.2 : 0.24) : 0;
+    const goalY = panel && !desktop ? size.height * (key === "sky" ? 0.22 : 0.24) : 0;
     const k = 1 - Math.exp(-4 * dt);
     offset.current.x += (goalX - offset.current.x) * k;
     offset.current.y += (goalY - offset.current.y) * k;

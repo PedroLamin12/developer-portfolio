@@ -269,6 +269,11 @@
 }
 .constellation-name[data-visible] { opacity: 1; transform: none; }
 .constellation-name[data-visible][data-dim] { opacity: 0.3; }
+@media (max-width: 639px) {
+  .constellation-name { font-size: 1.05rem; }
+  .constellation-name span { font-size: 0.5rem; }
+  .star-label { font-size: 0.58rem; padding: 0.25rem 0.45rem; --gap: 10px; }
+}
 
 /* Cinematic frame over the canvas */
 .cinematic::after {

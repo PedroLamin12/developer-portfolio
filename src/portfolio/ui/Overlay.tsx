@@ -270,7 +270,8 @@ function Panel() {
       aria-label={section.title}
       className={cn(
         "glass fixed z-40 flex flex-col transition-all duration-700 ease-[cubic-bezier(0.2,0.8,0.2,1)]",
-        "inset-x-0 bottom-0 max-h-[64dvh] rounded-t-3xl",
+        "inset-x-0 bottom-0 rounded-t-3xl",
+        shown === "sky" ? "max-h-[46dvh]" : "max-h-[64dvh]",
         "lg:inset-x-auto lg:top-20 lg:right-5 lg:bottom-5 lg:max-h-none lg:w-[460px] lg:rounded-3xl",
         open ? "translate-y-0 opacity-100 lg:translate-x-0" : "pointer-events-none translate-y-full opacity-0 lg:translate-x-[110%] lg:translate-y-0",
       )}
