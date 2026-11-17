@@ -149,8 +149,8 @@ function Stats() {
 function Lights() {
   return (
     <>
-      <hemisphereLight args={["#5a6fb0", "#1a140e", 0.9]} />
-      <directionalLight position={[-12, 22, -10]} intensity={0.55} color="#a9bcff" />
+      <hemisphereLight args={["#4a5f9c", "#1a140e", 0.6]} />
+      <directionalLight position={[-12, 22, -10]} intensity={0.45} color="#a9bcff" />
       <directionalLight position={[6, 14, -24]} intensity={0.35} color="#58f0b4" />
       <ambientLight intensity={0.12} color="#8090c0" />
       <Environment resolution={64} environmentIntensity={0.35}>

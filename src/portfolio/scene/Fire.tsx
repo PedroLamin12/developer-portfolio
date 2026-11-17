@@ -7,7 +7,7 @@ import { useCamp } from "../store";
 // Flames and embers are animated entirely on the GPU: each particle derives its
 // position from time and a per-particle seed, so the CPU never touches them.
 
-const FLAME_COUNT = 160;
+const FLAME_COUNT = 130;
 const EMBER_COUNT = 90;
 const FIRE_BASE = 0.22;
 
@@ -23,7 +23,7 @@ void main() {
   vLife = life;
   vSeed = aSeed.w;
   float ang = aSeed.z * 6.2831;
-  float r = (0.32 * (1.0 - life * 0.85)) * sqrt(aSeed.w);
+  float r = (0.3 * (1.0 - life * 0.9)) * sqrt(aSeed.w);
   vec3 p = vec3(cos(ang) * r, life * (0.9 + aSeed.y * 0.7), sin(ang) * r);
   p.x += sin(uTime * 3.0 + aSeed.z * 20.0 + life * 4.0) * 0.07 * life;
   p.z += cos(uTime * 2.6 + aSeed.x * 20.0) * 0.06 * life;
@@ -45,7 +45,7 @@ void main() {
   vec3 col = mix(hot, mid, smoothstep(0.0, 0.35, vLife));
   col = mix(col, cool, smoothstep(0.35, 0.85, vLife));
   float a = soft * soft * (1.0 - smoothstep(0.55, 1.0, vLife)) * smoothstep(0.0, 0.06, vLife);
-  gl_FragColor = vec4(col, a * 0.32);
+  gl_FragColor = vec4(col, a * 0.24);
 }`;
 
 const emberVert = /* glsl */ `
@@ -73,7 +73,7 @@ varying float vFlick;
 void main() {
   float d = length(gl_PointCoord - 0.5);
   float a = (1.0 - smoothstep(0.1, 0.5, d)) * (1.0 - smoothstep(0.5, 1.0, vLife)) * smoothstep(0.0, 0.08, vLife) * vFlick;
-  gl_FragColor = vec4(vec3(1.0, 0.6, 0.2) * 1.6, a);
+  gl_FragColor = vec4(vec3(1.0, 0.42, 0.1) * 1.5, a);
 }`;
 
 function seeds(count: number, seed: number) {

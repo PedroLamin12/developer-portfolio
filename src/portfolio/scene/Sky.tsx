@@ -63,8 +63,9 @@ float curtain(vec2 p, float offset, float speed, float t) {
   float line = p.y - (offset + sin(p.x * 0.45 + t * 0.07 + offset * 3.0) * 0.9 + (n - 0.5) * 2.6);
   float band = exp(-line * line * 1.6);
   float top = 1.0 - smoothstep(0.0, 1.8, abs(line + 0.6));
-  float rays = 0.55 + 0.45 * fbm(vec2(p.x * 3.2 + t * speed * 4.0, t * 0.05));
-  return (band * 0.8 + top * 0.35) * rays;
+  float r = fbm(vec2(p.x * 4.0 + t * speed * 4.0, t * 0.05));
+  float rays = 0.25 + 1.4 * r * r;
+  return (band * 0.85 + top * 0.12) * rays;
 }
 
 void main() {
@@ -91,7 +92,7 @@ void main() {
     vec3 violet = vec3(0.6, 0.25, 0.95);
     vec3 ac = mix(green, teal, smoothstep(0.1, 0.3, h));
     ac = mix(ac, violet, smoothstep(0.25, 0.6, h));
-    col += ac * a * fade * north * 1.15;
+    col += ac * a * fade * north * 0.7;
   }
 
 

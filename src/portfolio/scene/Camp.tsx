@@ -11,7 +11,7 @@ import pineRound from "@/assets/models/pine-round.glb.asset.json";
 import pineDefault from "@/assets/models/pine-default.glb.asset.json";
 import rockLarge from "@/assets/models/rock-large.glb.asset.json";
 import rockSmall from "@/assets/models/rock-small.glb.asset.json";
-import logSeat from "@/assets/models/log-seat.glb.asset.json";
+import logSeat from "@/assets/models/log-round.glb.asset.json";
 import stumpModel from "@/assets/models/stump.glb.asset.json";
 import mushroomsModel from "@/assets/models/mushrooms.glb.asset.json";
 import chestModel from "@/assets/models/chest.glb.asset.json";
@@ -155,7 +155,7 @@ export function CampProps() {
       <Model url={stonesModel.url} size={1.5} fit="width" />
       <Model url={logsModel.url} size={1.0} fit="width" position={[0, 0.02, 0]} rotation={0.4} />
       {seats.map((s, i) => (
-        <Model key={i} url={logSeat.url} size={1.9} fit="width" position={[Math.cos(s.a) * s.r, 0, Math.sin(s.a) * s.r]} rotation={-s.a + Math.PI / 2} />
+        <Model key={i} url={logSeat.url} size={1.45} fit="width" position={[Math.cos(s.a) * s.r, 0, Math.sin(s.a) * s.r]} rotation={-s.a + Math.PI / 2} />
       ))}
     </group>
   );

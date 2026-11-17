@@ -53,6 +53,12 @@ function tuneMaterial(mat: THREE.Material) {
     m.metalness = 0;
     m.roughness = Math.max(0.75, m.roughness ?? 1);
   }
+  if (m.color) {
+    // Calm the bright daytime kit colors for a night scene.
+    const hsl = { h: 0, s: 0, l: 0 };
+    m.color.getHSL(hsl);
+    m.color.setHSL(hsl.h, hsl.s * 0.62, hsl.l * 0.85);
+  }
 }
 
 type Xform = { position?: [number, number, number]; rotation?: number; scale?: number };
