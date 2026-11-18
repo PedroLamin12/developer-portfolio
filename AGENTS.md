@@ -34,6 +34,6 @@ use the editor.
 - The 3D scene (`src/portfolio/scene/*`) is lazy-loaded behind `<ClientOnly>` on `/`; the overlay UI and `/leitura` stay server-rendered so content is readable without WebGL.
 - Per-frame motion lives in refs/shaders (fire, embers, smoke, fireflies, sky are GPU-animated); zustand (`src/portfolio/store.ts`) holds only UI-level state.
 - drei `<Html>` labels always use `portal={labelLayer}` and stay mounted (fade with CSS) — conditional mounting or the default target remounts roots and logs React unmount errors.
-- Repeated GLB props (trees, rocks, grass) render through `Instances` in `scene/models.tsx` to keep draw calls low; models are Kenney CC0 (see `src/assets/models/CREDITS.md`).
+- Repeated GLB props (trees, rocks, grass) render through `Instances` in `scene/models.tsx` to keep draw calls low; models are Kenney CC0 files in `public/models` (see `CREDITS.md` there), referenced via `scene/modelUrls.ts` — never Lovable asset pointers, whose `/__l5e/` URLs 404 when the site is hosted outside Lovable (e.g. Vercel).
 - Badge physics is pure TS in `src/portfolio/sim/badges.ts` with vitest coverage; keep it free of React/DOM.
 - Deep links `/?ponto=fogueira|ferramentas|ceu|contato|clareira` open a point directly (used for presenting and visual checks).

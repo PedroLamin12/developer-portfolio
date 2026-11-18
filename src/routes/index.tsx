@@ -1,8 +1,22 @@
 import { createFileRoute, ClientOnly } from "@tanstack/react-router";
-import { lazy, Suspense } from "react";
+import { Component, lazy, Suspense, type ReactNode } from "react";
 import { Overlay } from "@/portfolio/ui/Overlay";
 
 const CampScene = lazy(() => import("@/portfolio/scene/CampScene"));
+
+// If the 3D scene fails (no WebGL, a model that can't load), keep the page and menu usable.
+class SceneBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
+  override state = { failed: false };
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+  override componentDidCatch(error: unknown) {
+    console.error("Cena 3D indisponível:", error);
+  }
+  override render() {
+    return this.state.failed ? null : this.props.children;
+  }
+}
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -25,9 +39,11 @@ function Index() {
   return (
     <main className="relative h-dvh w-full overflow-hidden bg-background">
       <ClientOnly fallback={<div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_80%,color-mix(in_oklab,var(--ember)_18%,transparent),transparent_60%)]" />}>
-        <Suspense fallback={null}>
-          <CampScene />
-        </Suspense>
+        <SceneBoundary>
+          <Suspense fallback={null}>
+            <CampScene />
+          </Suspense>
+        </SceneBoundary>
       </ClientOnly>
       <Overlay />
     </main>
