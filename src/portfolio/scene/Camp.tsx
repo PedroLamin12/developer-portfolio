@@ -4,7 +4,27 @@ import { Html } from "@react-three/drei";
 import * as THREE from "three";
 import { labelLayer } from "./labelLayer";
 import {
-  tentModel, stonesModel, logsModel, pineA, pineB, pineRound, pineDefault, rockLarge, rockSmall, logSeat, stumpModel, mushroomsModel, chestModel, axeModel, grassModel, logStackModel, bedrollModel, bucketModel, signpostModel, stumpOldModel, rockTallModel,
+  tentModel,
+  stonesModel,
+  logsModel,
+  pineA,
+  pineB,
+  pineRound,
+  pineDefault,
+  rockLarge,
+  rockSmall,
+  logSeat,
+  stumpModel,
+  mushroomsModel,
+  chestModel,
+  axeModel,
+  grassModel,
+  logStackModel,
+  bedrollModel,
+  bucketModel,
+  signpostModel,
+  stumpOldModel,
+  rockTallModel,
 } from "./modelUrls";
 import { Instances, Model, type Instance } from "./models";
 import { CHEST, LANTERN, TELESCOPE, TENT, SKY_DIR, mulberry32 } from "./layout";
@@ -12,7 +32,29 @@ import { useCamp } from "../store";
 import { sections, type SectionId } from "../content";
 import { radialTexture } from "./Fire";
 
-export const MODEL_URLS = [tentModel, stonesModel, logsModel, pineA, pineB, pineRound, pineDefault, rockLarge, rockSmall, logSeat, stumpModel, mushroomsModel, chestModel, axeModel, grassModel, logStackModel, bedrollModel, bucketModel, signpostModel, stumpOldModel, rockTallModel].map((m) => m.url);
+export const MODEL_URLS = [
+  tentModel,
+  stonesModel,
+  logsModel,
+  pineA,
+  pineB,
+  pineRound,
+  pineDefault,
+  rockLarge,
+  rockSmall,
+  logSeat,
+  stumpModel,
+  mushroomsModel,
+  chestModel,
+  axeModel,
+  grassModel,
+  logStackModel,
+  bedrollModel,
+  bucketModel,
+  signpostModel,
+  stumpOldModel,
+  rockTallModel,
+].map((m) => m.url);
 
 /* ---------------- Ground ---------------- */
 
@@ -31,7 +73,12 @@ export function Ground() {
       const y = rnd() * size;
       const r = 2 + rnd() * 14;
       const tone = rnd();
-      g.fillStyle = tone < 0.5 ? `rgba(48,66,38,${0.25 + rnd() * 0.3})` : tone < 0.8 ? `rgba(28,40,26,${0.3 + rnd() * 0.3})` : `rgba(70,62,40,${0.2 + rnd() * 0.2})`;
+      g.fillStyle =
+        tone < 0.5
+          ? `rgba(48,66,38,${0.25 + rnd() * 0.3})`
+          : tone < 0.8
+            ? `rgba(28,40,26,${0.3 + rnd() * 0.3})`
+            : `rgba(70,62,40,${0.2 + rnd() * 0.2})`;
       g.beginPath();
       g.arc(x, y, r, 0, Math.PI * 2);
       g.fill();
@@ -47,7 +94,12 @@ export function Ground() {
       const a = rnd() * Math.PI * 2;
       const d = Math.sqrt(rnd()) * size * 0.14;
       g.fillStyle = `rgba(${rnd() < 0.5 ? "120,96,70" : "50,40,30"},${0.2 + rnd() * 0.4})`;
-      g.fillRect(size / 2 + Math.cos(a) * d, size / 2 + Math.sin(a) * d, 1 + rnd() * 3, 1 + rnd() * 3);
+      g.fillRect(
+        size / 2 + Math.cos(a) * d,
+        size / 2 + Math.sin(a) * d,
+        1 + rnd() * 3,
+        1 + rnd() * 3,
+      );
     }
     // A trodden trail leaving the clearing towards the viewer.
     g.lineCap = "round";
@@ -56,7 +108,14 @@ export function Ground() {
       g.lineWidth = 16 - pass * 5;
       g.beginPath();
       g.moveTo(size / 2 + 6, size / 2 + 40);
-      g.bezierCurveTo(size / 2 + 40, size * 0.62, size / 2 - 30, size * 0.72, size / 2 + 20, size * 0.85);
+      g.bezierCurveTo(
+        size / 2 + 40,
+        size * 0.62,
+        size / 2 - 30,
+        size * 0.72,
+        size / 2 + 20,
+        size * 0.85,
+      );
       g.stroke();
     }
     const t = new THREE.CanvasTexture(c);
@@ -109,17 +168,32 @@ function useForest() {
       const x = Math.cos(a) * r;
       const z = Math.sin(a) * r;
       if (z > 5 && Math.abs(x) < 3) continue;
-      (rnd() < 0.4 ? rocks : smallRocks).push({ x, z, rot: rnd() * 6.28, scale: 0.6 + rnd() * 0.8 });
+      (rnd() < 0.4 ? rocks : smallRocks).push({
+        x,
+        z,
+        rot: rnd() * 6.28,
+        scale: 0.6 + rnd() * 0.8,
+      });
     }
     for (let i = 0; i < 130; i++) {
       const a = rnd() * Math.PI * 2;
       const r = 3.6 + rnd() * 16;
-      grass.push({ x: Math.cos(a) * r, z: Math.sin(a) * r, rot: rnd() * 6.28, scale: 0.6 + rnd() * 0.9 });
+      grass.push({
+        x: Math.cos(a) * r,
+        z: Math.sin(a) * r,
+        rot: rnd() * 6.28,
+        scale: 0.6 + rnd() * 0.9,
+      });
     }
     for (let i = 0; i < 9; i++) {
       const a = rnd() * Math.PI * 2;
       const r = 5 + rnd() * 6;
-      shrooms.push({ x: Math.cos(a) * r, z: Math.sin(a) * r, rot: rnd() * 6.28, scale: 0.7 + rnd() * 0.6 });
+      shrooms.push({
+        x: Math.cos(a) * r,
+        z: Math.sin(a) * r,
+        rot: rnd() * 6.28,
+        scale: 0.7 + rnd() * 0.6,
+      });
     }
     const tallRocks: Instance[] = [
       { x: -10.5, z: 3.5, rot: 0.4, scale: 1 },
@@ -165,12 +239,31 @@ export function CampProps() {
     <group>
       <Model url={stonesModel.url} size={1.5} fit="width" />
       <Model url={logsModel.url} size={1.0} fit="width" position={[0, 0.02, 0]} rotation={0.4} />
-      <Model url={logStackModel.url} size={1.4} fit="width" position={[-6.1, 0, -1.2]} rotation={1.3} />
-      <Model url={bedrollModel.url} size={1.5} fit="width" position={[-2.0, 0, -3.7]} rotation={0.5} />
+      <Model
+        url={logStackModel.url}
+        size={1.4}
+        fit="width"
+        position={[-6.1, 0, -1.2]}
+        rotation={1.3}
+      />
+      <Model
+        url={bedrollModel.url}
+        size={1.5}
+        fit="width"
+        position={[-2.0, 0, -3.7]}
+        rotation={0.5}
+      />
       <Model url={bucketModel.url} size={0.42} position={[4.4, 0, 0.6]} rotation={0.4} />
-      <Model url={signpostModel.url} size={1.3} position={[-5.2, 0, 2.6]} rotation={0.9} />
+      {/* signpost is now an interactive hotspot */}
       {seats.map((s, i) => (
-        <Model key={i} url={logSeat.url} size={1.45} fit="width" position={[Math.cos(s.a) * s.r, 0, Math.sin(s.a) * s.r]} rotation={-s.a + Math.PI / 2} />
+        <Model
+          key={i}
+          url={logSeat.url}
+          size={1.45}
+          fit="width"
+          position={[Math.cos(s.a) * s.r, 0, Math.sin(s.a) * s.r]}
+          rotation={-s.a + Math.PI / 2}
+        />
       ))}
     </group>
   );
@@ -178,7 +271,19 @@ export function CampProps() {
 
 /* ---------------- Hotspots ---------------- */
 
-function Hotspot({ id, children, markerY, position, hit }: { id: SectionId; children: ReactNode; markerY: number; position: THREE.Vector3; hit: [number, number] }) {
+function Hotspot({
+  id,
+  children,
+  markerY,
+  position,
+  hit,
+}: {
+  id: SectionId;
+  children: ReactNode;
+  markerY: number;
+  position: THREE.Vector3;
+  hit: [number, number];
+}) {
   const setFocus = useCamp((s) => s.setFocus);
   const setHovered = useCamp((s) => s.setHovered);
   const hovered = useCamp((s) => s.hovered === id);
@@ -197,7 +302,11 @@ function Hotspot({ id, children, markerY, position, hit }: { id: SectionId; chil
     if (ring.current) {
       const m = ring.current.material as THREE.MeshBasicMaterial;
       const goal = hovered && focus !== id ? 0.8 : 0.0;
-      m.opacity = THREE.MathUtils.lerp(m.opacity, goal + Math.sin(state.clock.elapsedTime * 3) * 0.05 * goal, k);
+      m.opacity = THREE.MathUtils.lerp(
+        m.opacity,
+        goal + Math.sin(state.clock.elapsedTime * 3) * 0.05 * goal,
+        k,
+      );
     }
   });
 
@@ -229,10 +338,16 @@ function Hotspot({ id, children, markerY, position, hit }: { id: SectionId; chil
       </group>
       <mesh ref={ring} rotation-x={-Math.PI / 2} position={[0, 0.03, 0]}>
         <ringGeometry args={[0.95, 1.12, 48]} />
-        <meshBasicMaterial color="#ffc27a" transparent opacity={0} depthWrite={false} blending={THREE.AdditiveBlending} />
+        <meshBasicMaterial
+          color="#ffc27a"
+          transparent
+          opacity={0}
+          depthWrite={false}
+          blending={THREE.AdditiveBlending}
+        />
       </mesh>
       {/* Always mounted; hidden with CSS so Html roots never unmount mid-render. */}
-      {(
+      {
         <Html portal={labelLayer} position={[0, markerY, 0]} center zIndexRange={[30, 20]}>
           <button
             type="button"
@@ -252,7 +367,7 @@ function Hotspot({ id, children, markerY, position, hit }: { id: SectionId; chil
             </span>
           </button>
         </Html>
-      )}
+      }
     </group>
   );
 }
@@ -262,6 +377,14 @@ export function Hotspots() {
     <>
       <Hotspot id="fire" position={new THREE.Vector3(0, 0, 0)} markerY={2.1} hit={[0.85, 1.6]}>
         {null}
+      </Hotspot>
+      <Hotspot
+        id="projects"
+        position={new THREE.Vector3(-5.2, 0, 2.6)}
+        markerY={1.65}
+        hit={[0.8, 1.4]}
+      >
+        <Model url={signpostModel.url} size={1.3} rotation={0.9} />
       </Hotspot>
       <Hotspot id="skills" position={CHEST} markerY={1.35} hit={[0.75, 0.9]}>
         <Model url={chestModel.url} size={0.95} fit="width" rotation={-2.1} />
@@ -283,13 +406,24 @@ export function Hotspots() {
 
 /* ---------------- Telescope (procedural) ---------------- */
 
-const brass = new THREE.MeshStandardMaterial({ color: "#c79a52", metalness: 0.55, roughness: 0.35 });
+const brass = new THREE.MeshStandardMaterial({
+  color: "#c79a52",
+  metalness: 0.55,
+  roughness: 0.35,
+});
 const darkWood = new THREE.MeshStandardMaterial({ color: "#4a3324", roughness: 0.85 });
-const blackMetal = new THREE.MeshStandardMaterial({ color: "#1b1d22", metalness: 0.4, roughness: 0.5 });
+const blackMetal = new THREE.MeshStandardMaterial({
+  color: "#1b1d22",
+  metalness: 0.4,
+  roughness: 0.5,
+});
 
 function Telescope() {
   const mountY = 1.12;
-  const quat = useMemo(() => new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), SKY_DIR), []);
+  const quat = useMemo(
+    () => new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), SKY_DIR),
+    [],
+  );
   const legs = [0, (Math.PI * 2) / 3, (Math.PI * 4) / 3];
   return (
     <group>
@@ -298,7 +432,10 @@ function Telescope() {
         const top = new THREE.Vector3(0, mountY, 0);
         const mid = foot.clone().add(top).multiplyScalar(0.5);
         const len = foot.distanceTo(top);
-        const q = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), top.clone().sub(foot).normalize());
+        const q = new THREE.Quaternion().setFromUnitVectors(
+          new THREE.Vector3(0, 1, 0),
+          top.clone().sub(foot).normalize(),
+        );
         return (
           <mesh key={i} position={mid} quaternion={q} material={darkWood}>
             <cylinderGeometry args={[0.025, 0.035, len, 6]} />
@@ -334,11 +471,25 @@ function Lantern() {
   const glass = useRef<THREE.MeshStandardMaterial>(null);
   const halo = useRef<THREE.SpriteMaterial>(null);
   const level = useRef(0);
-  const haloMap = useMemo(() => radialTexture([[0, "rgba(255,210,130,0.9)"], [0.3, "rgba(255,170,80,0.25)"], [1, "rgba(255,150,60,0)"]]), []);
-  const [frame] = useState(() => new THREE.MeshStandardMaterial({ color: "#2b2b2e", metalness: 0.5, roughness: 0.45 }));
+  const haloMap = useMemo(
+    () =>
+      radialTexture([
+        [0, "rgba(255,210,130,0.9)"],
+        [0.3, "rgba(255,170,80,0.25)"],
+        [1, "rgba(255,150,60,0)"],
+      ]),
+    [],
+  );
+  const [frame] = useState(
+    () => new THREE.MeshStandardMaterial({ color: "#2b2b2e", metalness: 0.5, roughness: 0.45 }),
+  );
 
   useFrame((state, dt) => {
-    level.current = THREE.MathUtils.lerp(level.current, lit ? 1 : 0.06, 1 - Math.exp(-2.5 * Math.min(dt, 0.05)));
+    level.current = THREE.MathUtils.lerp(
+      level.current,
+      lit ? 1 : 0.06,
+      1 - Math.exp(-2.5 * Math.min(dt, 0.05)),
+    );
     const t = state.clock.elapsedTime;
     const f = level.current * (0.93 + 0.07 * Math.sin(t * 13.0) * Math.sin(t * 4.7));
     if (light.current) light.current.intensity = 7 * f;
@@ -353,10 +504,26 @@ function Lantern() {
       </mesh>
       <mesh position={[0, 0.17, 0]}>
         <cylinderGeometry args={[0.085, 0.085, 0.22, 12]} />
-        <meshStandardMaterial ref={glass} color="#ffe2ad" emissive="#ffb54d" emissiveIntensity={0.2} transparent opacity={0.85} roughness={0.2} />
+        <meshStandardMaterial
+          ref={glass}
+          color="#ffe2ad"
+          emissive="#ffb54d"
+          emissiveIntensity={0.2}
+          transparent
+          opacity={0.85}
+          roughness={0.2}
+        />
       </mesh>
       {[0, 1, 2, 3].map((i) => (
-        <mesh key={i} position={[Math.cos((i * Math.PI) / 2) * 0.095, 0.17, Math.sin((i * Math.PI) / 2) * 0.095]} material={frame}>
+        <mesh
+          key={i}
+          position={[
+            Math.cos((i * Math.PI) / 2) * 0.095,
+            0.17,
+            Math.sin((i * Math.PI) / 2) * 0.095,
+          ]}
+          material={frame}
+        >
           <boxGeometry args={[0.014, 0.24, 0.014]} />
         </mesh>
       ))}
@@ -366,9 +533,24 @@ function Lantern() {
       <mesh position={[0, 0.42, 0]} material={frame}>
         <torusGeometry args={[0.05, 0.008, 6, 16]} />
       </mesh>
-      <pointLight ref={light} position={[0, 0.2, 0]} color="#ffbf66" intensity={0} distance={0} decay={1.8} />
+      <pointLight
+        ref={light}
+        position={[0, 0.2, 0]}
+        color="#ffbf66"
+        intensity={0}
+        distance={0}
+        decay={1.8}
+      />
       <sprite position={[0, 0.18, 0]} scale={1.1}>
-        <spriteMaterial ref={halo} map={haloMap} blending={THREE.AdditiveBlending} depthWrite={false} transparent opacity={0} fog={false} />
+        <spriteMaterial
+          ref={halo}
+          map={haloMap}
+          blending={THREE.AdditiveBlending}
+          depthWrite={false}
+          transparent
+          opacity={0}
+          fog={false}
+        />
       </sprite>
     </group>
   );

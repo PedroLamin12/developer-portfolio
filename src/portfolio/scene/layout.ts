@@ -11,7 +11,11 @@ function dirFromAzEl(azDeg: number, elDeg: number) {
   const az = THREE.MathUtils.degToRad(azDeg);
   const el = THREE.MathUtils.degToRad(elDeg);
   // az 0 = towards -Z, positive az turns towards +X.
-  return new THREE.Vector3(Math.sin(az) * Math.cos(el), Math.sin(el), -Math.cos(az) * Math.cos(el)).normalize();
+  return new THREE.Vector3(
+    Math.sin(az) * Math.cos(el),
+    Math.sin(el),
+    -Math.cos(az) * Math.cos(el),
+  ).normalize();
 }
 
 export const SKY_RADIUS = 95;
@@ -27,13 +31,20 @@ export type Waypoint = { pos: THREE.Vector3; target: THREE.Vector3 };
 
 const skyEye = new THREE.Vector3(2.1, 1.55, -1.2);
 
-export const SKY_PORTRAIT: Waypoint = { pos: skyEye, target: skyEye.clone().add(dirFromAzEl(12, 46).multiplyScalar(40)) };
+export const SKY_PORTRAIT: Waypoint = {
+  pos: skyEye,
+  target: skyEye.clone().add(dirFromAzEl(12, 46).multiplyScalar(40)),
+};
 
-export const WAYPOINTS: Record<"intro" | "overview" | "fire" | "skills" | "sky" | "tent", Waypoint> = {
+export const WAYPOINTS: Record<
+  "intro" | "overview" | "fire" | "skills" | "projects" | "sky" | "tent",
+  Waypoint
+> = {
   intro: { pos: new THREE.Vector3(-6, 9, 17), target: new THREE.Vector3(0, 3.5, -4) },
   overview: { pos: new THREE.Vector3(0.6, 3.3, 9.2), target: new THREE.Vector3(-0.2, 0.9, -0.6) },
   fire: { pos: new THREE.Vector3(2.3, 1.9, 4.4), target: new THREE.Vector3(0, 0.8, 0) },
   skills: { pos: new THREE.Vector3(6.3, 2.3, 5.4), target: new THREE.Vector3(3.2, 0.5, 1.6) },
+  projects: { pos: new THREE.Vector3(-2.8, 2.1, 5.2), target: new THREE.Vector3(-5.2, 1.2, 2.6) },
   sky: { pos: skyEye, target: skyEye.clone().add(SKY_DIR.clone().multiplyScalar(40)) },
   tent: { pos: new THREE.Vector3(0.4, 2.4, 3.2), target: new THREE.Vector3(-3.5, 0.9, -2.5) },
 };

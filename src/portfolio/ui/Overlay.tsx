@@ -1,17 +1,46 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
-import { ArrowLeft, ArrowRight, BookOpen, Flame, Gauge, Headphones, Menu, Telescope, Tent, Toolbox, Volume2, VolumeX, X, Compass } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  BookOpen,
+  Flame,
+  FolderGit2,
+  Gauge,
+  Headphones,
+  Menu,
+  Telescope,
+  Tent,
+  Toolbox,
+  Volume2,
+  VolumeX,
+  X,
+  Compass,
+} from "lucide-react";
 import { useCamp, perfStats, type Focus } from "../store";
 import { profile, sections, type SectionId } from "../content";
 import { ambience } from "../audio/ambience";
-import { ContactSection, ManifestoSection, RoadmapSection, SkillsSection } from "./sections";
+import {
+  ContactSection,
+  ManifestoSection,
+  ProjectsSection,
+  RoadmapSection,
+  SkillsSection,
+} from "./sections";
 import { cn } from "@/lib/utils";
 
-const ICONS: Record<SectionId, typeof Flame> = { fire: Flame, skills: Toolbox, sky: Telescope, tent: Tent };
+const ICONS: Record<SectionId, typeof Flame> = {
+  fire: Flame,
+  skills: Toolbox,
+  projects: FolderGit2,
+  sky: Telescope,
+  tent: Tent,
+};
 
 function SectionBody({ id }: { id: SectionId }) {
   if (id === "fire") return <ManifestoSection />;
   if (id === "skills") return <SkillsSection />;
+  if (id === "projects") return <ProjectsSection />;
   if (id === "sky") return <RoadmapSection />;
   return <ContactSection />;
 }
@@ -34,17 +63,31 @@ function Intro() {
       aria-hidden={entered}
     >
       <div className="max-w-xl">
-        <p className="rise font-mono text-[0.7rem] tracking-[0.28em] text-ember uppercase">{profile.school}</p>
-        <h1 className="rise mt-5 font-display leading-[0.95] font-light tracking-tight" style={{ animationDelay: "120ms" }}>
+        <p className="rise font-mono text-[0.7rem] tracking-[0.28em] text-ember uppercase">
+          {profile.school}
+        </p>
+        <h1
+          className="rise mt-5 font-display leading-[0.95] font-light tracking-tight"
+          style={{ animationDelay: "120ms" }}
+        >
           <span className="block text-6xl sm:text-7xl lg:text-8xl">
             {first} <em className="text-gradient-ember font-normal">{rest[0]}</em>
           </span>
-          <span className="mt-3 block text-xl text-foreground/70 sm:text-2xl">{restName.replace(rest[0] + " ", "")}</span>
+          <span className="mt-3 block text-xl text-foreground/70 sm:text-2xl">
+            {restName.replace(rest[0] + " ", "")}
+          </span>
         </h1>
-        <p className="rise mt-6 max-w-md text-lg leading-relaxed text-foreground/80" style={{ animationDelay: "240ms" }}>
-          {profile.role}, {profile.age} anos. <span className="font-display text-foreground italic">{profile.tagline}</span>
+        <p
+          className="rise mt-6 max-w-md text-lg leading-relaxed text-foreground/80"
+          style={{ animationDelay: "240ms" }}
+        >
+          {profile.role}, {profile.age} anos.{" "}
+          <span className="font-display text-foreground italic">{profile.tagline}</span>
         </p>
-        <div className="rise mt-9 flex flex-wrap items-center gap-3" style={{ animationDelay: "360ms" }}>
+        <div
+          className="rise mt-9 flex flex-wrap items-center gap-3"
+          style={{ animationDelay: "360ms" }}
+        >
           <button
             type="button"
             disabled={!ready}
@@ -60,12 +103,19 @@ function Intro() {
             </span>
             {ready ? "Entrar no acampamento" : "Acendendo a fogueira…"}
           </button>
-          <Link to="/leitura" className="rounded-full border px-5 py-3.5 text-sm font-semibold text-foreground/80 transition hover:border-foreground/40 hover:text-foreground">
+          <Link
+            to="/leitura"
+            className="rounded-full border px-5 py-3.5 text-sm font-semibold text-foreground/80 transition hover:border-foreground/40 hover:text-foreground"
+          >
             Ler sem 3D
           </Link>
         </div>
-        <p className="rise mt-6 flex items-center gap-2 text-xs text-muted-foreground" style={{ animationDelay: "480ms" }}>
-          <Headphones className="size-3.5" /> Melhor com fones de ouvido · o som pode ser desligado a qualquer momento
+        <p
+          className="rise mt-6 flex items-center gap-2 text-xs text-muted-foreground"
+          style={{ animationDelay: "480ms" }}
+        >
+          <Headphones className="size-3.5" /> Melhor com fones de ouvido · o som pode ser desligado
+          a qualquer momento
         </p>
       </div>
     </div>
@@ -96,7 +146,10 @@ function TopBar() {
       <button
         type="button"
         onClick={() => entered && setFocus("overview")}
-        className={cn("pointer-events-auto flex items-center gap-3 transition-opacity duration-700", entered ? "opacity-100" : "opacity-0")}
+        className={cn(
+          "pointer-events-auto flex items-center gap-3 transition-opacity duration-700",
+          entered ? "opacity-100" : "opacity-0",
+        )}
         aria-label="Voltar à visão geral"
       >
         <span className="grid size-10 place-items-center rounded-full border bg-glass font-display text-lg italic backdrop-blur">
@@ -104,7 +157,9 @@ function TopBar() {
         </span>
         <span className="hidden text-left sm:block">
           <span className="block text-sm leading-tight font-semibold">{profile.shortName}</span>
-          <span className="block font-mono text-[0.62rem] tracking-[0.16em] text-muted-foreground uppercase">{profile.role}</span>
+          <span className="block font-mono text-[0.62rem] tracking-[0.16em] text-muted-foreground uppercase">
+            {profile.role}
+          </span>
         </span>
       </button>
 
@@ -126,7 +181,11 @@ function TopBar() {
           {!muted && (
             <span className="flex h-3 items-end gap-[2px]" aria-hidden>
               {[0, 1, 2].map((i) => (
-                <span key={i} className="w-[2px] animate-pulse rounded-full bg-ember" style={{ height: `${6 + i * 3}px`, animationDelay: `${i * 0.2}s` }} />
+                <span
+                  key={i}
+                  className="w-[2px] animate-pulse rounded-full bg-ember"
+                  style={{ height: `${6 + i * 3}px`, animationDelay: `${i * 0.2}s` }}
+                />
               ))}
             </span>
           )}
@@ -163,12 +222,27 @@ function QuickMenu({ onClose }: { onClose: () => void }) {
     onClose();
   };
   return (
-    <div role="menu" className="glass rise absolute top-12 right-0 w-[min(20rem,calc(100vw-2rem))] rounded-2xl p-2" style={{ animationDuration: "0.35s" }}>
-      <p className="px-3 pt-2 pb-1 font-mono text-[0.6rem] tracking-[0.2em] text-muted-foreground uppercase">Pontos do acampamento</p>
+    <div
+      role="menu"
+      className="glass rise absolute top-12 right-0 w-[min(20rem,calc(100vw-2rem))] rounded-2xl p-2"
+      style={{ animationDuration: "0.35s" }}
+    >
+      <p className="px-3 pt-2 pb-1 font-mono text-[0.6rem] tracking-[0.2em] text-muted-foreground uppercase">
+        Pontos do acampamento
+      </p>
       {sections.map((s) => {
         const Icon = ICONS[s.id];
         return (
-          <button key={s.id} role="menuitem" type="button" onClick={() => go(s.id)} className={cn("flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition hover:bg-accent", focus === s.id && "bg-accent")}>
+          <button
+            key={s.id}
+            role="menuitem"
+            type="button"
+            onClick={() => go(s.id)}
+            className={cn(
+              "flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition hover:bg-accent",
+              focus === s.id && "bg-accent",
+            )}
+          >
             <Icon className="size-4 text-ember" />
             <span className="flex-1">
               <span className="block text-sm font-semibold">{s.title}</span>
@@ -179,20 +253,47 @@ function QuickMenu({ onClose }: { onClose: () => void }) {
         );
       })}
       <div className="my-1.5 h-px bg-border" />
-      <button role="menuitem" type="button" onClick={() => go("overview")} className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm transition hover:bg-accent">
+      <button
+        role="menuitem"
+        type="button"
+        onClick={() => go("overview")}
+        className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm transition hover:bg-accent"
+      >
         <Compass className="size-4 text-aurora" /> Visão geral da clareira
       </button>
-      <Link role="menuitem" to="/leitura" onClick={onClose} className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition hover:bg-accent">
+      <Link
+        role="menuitem"
+        to="/leitura"
+        onClick={onClose}
+        className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition hover:bg-accent"
+      >
         <BookOpen className="size-4 text-aurora" /> Ler tudo em formato de texto
       </Link>
-      <button role="menuitemcheckbox" aria-checked={showStats} type="button" onClick={toggleStats} className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm transition hover:bg-accent">
+      <button
+        role="menuitemcheckbox"
+        aria-checked={showStats}
+        type="button"
+        onClick={toggleStats}
+        className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm transition hover:bg-accent"
+      >
         <Gauge className="size-4 text-aurora-violet" /> Bastidores: desempenho ao vivo
-        <span className={cn("ml-auto h-4 w-7 rounded-full p-0.5 transition", showStats ? "bg-aurora" : "bg-muted")}>
-          <span className={cn("block size-3 rounded-full bg-background transition", showStats && "translate-x-3")} />
+        <span
+          className={cn(
+            "ml-auto h-4 w-7 rounded-full p-0.5 transition",
+            showStats ? "bg-aurora" : "bg-muted",
+          )}
+        >
+          <span
+            className={cn(
+              "block size-3 rounded-full bg-background transition",
+              showStats && "translate-x-3",
+            )}
+          />
         </span>
       </button>
       <p className="px-3 pt-2 pb-1.5 text-[0.68rem] text-muted-foreground">
-        Atalhos: <kbd className="font-mono">1–4</kbd> pontos · <kbd className="font-mono">Esc</kbd> voltar · <kbd className="font-mono">M</kbd> som
+        Atalhos: <kbd className="font-mono">1–5</kbd> pontos · <kbd className="font-mono">Esc</kbd>{" "}
+        voltar · <kbd className="font-mono">M</kbd> som
       </p>
     </div>
   );
@@ -213,7 +314,8 @@ function Dock() {
       className={cn(
         "absolute bottom-4 left-1/2 z-30 -translate-x-1/2 transition-all duration-700 sm:bottom-6",
         entered ? "opacity-100" : "pointer-events-none translate-y-6 opacity-0",
-        panel && "max-lg:pointer-events-none max-lg:translate-y-24 max-lg:opacity-0 lg:left-[calc(50%-240px)]",
+        panel &&
+          "max-lg:pointer-events-none max-lg:translate-y-24 max-lg:opacity-0 lg:left-[calc(50%-240px)]",
       )}
     >
       <ul className="glass flex items-center gap-1 rounded-full p-1.5">
@@ -230,11 +332,17 @@ function Dock() {
                 aria-current={active ? "true" : undefined}
                 className={cn(
                   "group flex items-center gap-2 rounded-full px-3.5 py-2.5 text-sm font-semibold transition",
-                  active ? "bg-[image:var(--gradient-ember)] text-primary-foreground" : hovered === s.id ? "bg-accent" : "text-foreground/80 hover:bg-accent",
+                  active
+                    ? "bg-[image:var(--gradient-ember)] text-primary-foreground"
+                    : hovered === s.id
+                      ? "bg-accent"
+                      : "text-foreground/80 hover:bg-accent",
                 )}
               >
                 <Icon className="size-4" />
-                <span className={cn("hidden", panel ? "xl:inline" : "md:inline")}>{s.place.replace(/^(A|O) /, "")}</span>
+                <span className={cn("hidden", panel ? "xl:inline" : "md:inline")}>
+                  {s.place.replace(/^(A|O) /, "")}
+                </span>
               </button>
             </li>
           );
@@ -273,7 +381,9 @@ function Panel() {
         "inset-x-0 bottom-0 rounded-t-3xl",
         shown === "sky" ? "max-h-[46dvh]" : "max-h-[64dvh]",
         "lg:inset-x-auto lg:top-20 lg:right-5 lg:bottom-5 lg:max-h-none lg:w-[460px] lg:rounded-3xl",
-        open ? "translate-y-0 opacity-100 lg:translate-x-0" : "pointer-events-none translate-y-full opacity-0 lg:translate-x-[110%] lg:translate-y-0",
+        open
+          ? "translate-y-0 opacity-100 lg:translate-x-0"
+          : "pointer-events-none translate-y-full opacity-0 lg:translate-x-[110%] lg:translate-y-0",
       )}
     >
       <div className="mx-auto mt-2 h-1 w-10 rounded-full bg-foreground/20 lg:hidden" />
@@ -287,11 +397,20 @@ function Panel() {
           </p>
           <h2 className="mt-0.5 font-display text-2xl leading-tight">{section.title}</h2>
         </div>
-        <button type="button" onClick={() => setFocus("overview")} className="grid size-9 shrink-0 place-items-center rounded-full border transition hover:border-foreground/40 hover:bg-accent" aria-label="Fechar e voltar à clareira">
+        <button
+          type="button"
+          onClick={() => setFocus("overview")}
+          className="grid size-9 shrink-0 place-items-center rounded-full border transition hover:border-foreground/40 hover:bg-accent"
+          aria-label="Fechar e voltar à clareira"
+        >
           <X className="size-4" />
         </button>
       </header>
-      <div ref={scroller} className="panel-scroll flex-1 overflow-y-auto px-5 py-5 sm:px-6" key={shown}>
+      <div
+        ref={scroller}
+        className="panel-scroll flex-1 overflow-y-auto px-5 py-5 sm:px-6"
+        key={shown}
+      >
         <div className="rise">
           <SectionBody id={shown} />
         </div>
@@ -310,7 +429,11 @@ function Panel() {
 
 function NavButton({ children, onClick }: { children: ReactNode; onClick: () => void }) {
   return (
-    <button type="button" onClick={onClick} className="flex min-w-0 items-center gap-2 rounded-full px-3 py-2 text-muted-foreground transition hover:bg-accent hover:text-foreground">
+    <button
+      type="button"
+      onClick={onClick}
+      className="flex min-w-0 items-center gap-2 rounded-full px-3 py-2 text-muted-foreground transition hover:bg-accent hover:text-foreground"
+    >
       {children}
     </button>
   );
@@ -376,7 +499,14 @@ export function Overlay() {
 
   useEffect(() => {
     // Deep links such as /?ponto=fogueira open a point of interest directly.
-    const map: Record<string, Focus> = { fogueira: "fire", ferramentas: "skills", ceu: "sky", contato: "tent", clareira: "overview" };
+    const map: Record<string, Focus> = {
+      fogueira: "fire",
+      ferramentas: "skills",
+      projetos: "projects",
+      ceu: "sky",
+      contato: "tent",
+      clareira: "overview",
+    };
     const p = new URLSearchParams(window.location.search).get("ponto");
     const target = p ? map[p] : undefined;
     if (target) {
@@ -391,7 +521,8 @@ export function Overlay() {
       if (tag === "INPUT" || tag === "TEXTAREA") return;
       const st = useCamp.getState();
       if (e.key === "Escape") st.setFocus("overview");
-      else if (["1", "2", "3", "4"].includes(e.key) && st.entered) st.setFocus(sections[Number(e.key) - 1]!.id);
+      else if (["1", "2", "3", "4", "5"].includes(e.key) && st.entered)
+        st.setFocus(sections[Number(e.key) - 1]!.id);
       else if (e.key.toLowerCase() === "m" && st.entered) st.setMuted(!st.muted);
     };
     window.addEventListener("keydown", onKey);

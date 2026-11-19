@@ -6,16 +6,54 @@ export const profile = {
   age: 16,
   role: "Desenvolvedor de Software",
   school: "ETEC — Técnico em Informática para Internet",
-  tagline: "Escrevo código como quem escreve prosa: com intenção, ritmo e cuidado com quem vai ler.",
+  tagline:
+    "Escrevo código como quem escreve prosa: com intenção, ritmo e cuidado com quem vai ler.",
 };
 
-export type SectionId = "fire" | "skills" | "sky" | "tent";
+export type SectionId = "fire" | "skills" | "projects" | "sky" | "tent";
 
-export const sections: { id: SectionId; index: string; title: string; place: string; hint: string }[] = [
-  { id: "fire", index: "01", title: "Manifesto & História", place: "A Fogueira", hint: "Quem sou e no que acredito" },
-  { id: "skills", index: "02", title: "Inventário de Habilidades", place: "A Caixa de Ferramentas", hint: "O que carrego na trilha" },
-  { id: "sky", index: "03", title: "Roadmap de Aprendizado", place: "O Telescópio", hint: "As constelações que sigo" },
-  { id: "tent", index: "04", title: "Contato", place: "A Barraca & o Lampião", hint: "Vamos conversar" },
+export const sections: {
+  id: SectionId;
+  index: string;
+  title: string;
+  place: string;
+  hint: string;
+}[] = [
+  {
+    id: "fire",
+    index: "01",
+    title: "Manifesto & História",
+    place: "A Fogueira",
+    hint: "Quem sou e no que acredito",
+  },
+  {
+    id: "skills",
+    index: "02",
+    title: "Inventário de Habilidades",
+    place: "A Caixa de Ferramentas",
+    hint: "O que carrego na trilha",
+  },
+  {
+    id: "projects",
+    index: "03",
+    title: "Projetos & Criações",
+    place: "A Placa de Trilha",
+    hint: "Sistemas e interfaces no ar",
+  },
+  {
+    id: "sky",
+    index: "04",
+    title: "Roadmap de Aprendizado",
+    place: "O Telescópio",
+    hint: "As constelações que sigo",
+  },
+  {
+    id: "tent",
+    index: "05",
+    title: "Contato",
+    place: "A Barraca & o Lampião",
+    hint: "Vamos conversar",
+  },
 ];
 
 export const manifesto = {
@@ -45,19 +83,85 @@ export type Skill = {
   note: string;
 };
 
-export const skillCategories: SkillCategory[] = ["Linguagens", "Front-end", "Back-end", "Ferramentas", "Design"];
+export const skillCategories: SkillCategory[] = [
+  "Linguagens",
+  "Front-end",
+  "Back-end",
+  "Ferramentas",
+  "Design",
+];
 
 export const skills: Skill[] = [
-  { id: "ts", name: "TypeScript", category: "Linguagens", level: 82, note: "Tipagem como documentação viva do sistema." },
-  { id: "js", name: "JavaScript", category: "Linguagens", level: 88, note: "A base de tudo o que construo na web." },
-  { id: "react", name: "React", category: "Front-end", level: 84, note: "Componentes, estado e interfaces reativas." },
-  { id: "tailwind", name: "Tailwind CSS", category: "Front-end", level: 86, note: "Sistemas de design consistentes e rápidos." },
-  { id: "htmlcss", name: "HTML & CSS", category: "Front-end", level: 92, note: "Semântica, acessibilidade e layout preciso." },
-  { id: "node", name: "Node.js", category: "Back-end", level: 66, note: "APIs, scripts e o lado servidor da web." },
-  { id: "arch", name: "Arquitetura Web", category: "Back-end", level: 62, note: "Separar responsabilidades para o código crescer." },
-  { id: "git", name: "Git", category: "Ferramentas", level: 76, note: "Histórico limpo, branches e colaboração." },
-  { id: "uiux", name: "UI/UX", category: "Design", level: 74, note: "Interfaces que se explicam sozinhas." },
-  { id: "three", name: "Three.js / WebGL", category: "Front-end", level: 55, note: "Gráficos 3D em tempo real — como este cenário." },
+  {
+    id: "ts",
+    name: "TypeScript",
+    category: "Linguagens",
+    level: 82,
+    note: "Tipagem como documentação viva do sistema.",
+  },
+  {
+    id: "js",
+    name: "JavaScript",
+    category: "Linguagens",
+    level: 88,
+    note: "A base de tudo o que construo na web.",
+  },
+  {
+    id: "react",
+    name: "React",
+    category: "Front-end",
+    level: 84,
+    note: "Componentes, estado e interfaces reativas.",
+  },
+  {
+    id: "tailwind",
+    name: "Tailwind CSS",
+    category: "Front-end",
+    level: 86,
+    note: "Sistemas de design consistentes e rápidos.",
+  },
+  {
+    id: "htmlcss",
+    name: "HTML & CSS",
+    category: "Front-end",
+    level: 92,
+    note: "Semântica, acessibilidade e layout preciso.",
+  },
+  {
+    id: "node",
+    name: "Node.js",
+    category: "Back-end",
+    level: 66,
+    note: "APIs, scripts e o lado servidor da web.",
+  },
+  {
+    id: "arch",
+    name: "Arquitetura Web",
+    category: "Back-end",
+    level: 62,
+    note: "Separar responsabilidades para o código crescer.",
+  },
+  {
+    id: "git",
+    name: "Git",
+    category: "Ferramentas",
+    level: 76,
+    note: "Histórico limpo, branches e colaboração.",
+  },
+  {
+    id: "uiux",
+    name: "UI/UX",
+    category: "Design",
+    level: 74,
+    note: "Interfaces que se explicam sozinhas.",
+  },
+  {
+    id: "three",
+    name: "Three.js / WebGL",
+    category: "Front-end",
+    level: 55,
+    note: "Gráficos 3D em tempo real — como este cenário.",
+  },
 ];
 
 export function levelLabel(level: number): string {
@@ -99,7 +203,8 @@ export const roadmap: Constellation[] = [
     id: "exploring",
     name: "O Explorador",
     stage: "O que estou explorando",
-    description: "Pontos de luz que ainda estou mapeando — e que me tiram o sono no melhor sentido.",
+    description:
+      "Pontos de luz que ainda estou mapeando — e que me tiram o sono no melhor sentido.",
     stars: [
       { label: "Inteligência Artificial", detail: "LLMs, APIs e produtos com IA" },
       { label: "WebGL & 3D", detail: "Three.js, shaders e cenas em tempo real" },
@@ -130,14 +235,104 @@ export const contact = {
   phoneHref: "tel:+5511950503332",
   whatsapp: "https://wa.me/5511950503332",
   status: "Disponível para estágios e projetos",
-  statusDetail: "Aberto a oportunidades de estágio, projetos colaborativos e conversas sobre tecnologia.",
+  statusDetail:
+    "Aberto a oportunidades de estágio, projetos colaborativos e conversas sobre tecnologia.",
 };
 
 export const behindTheScenes = [
-  { title: "React + TypeScript", text: "Toda a interface é tipada e dividida em módulos com responsabilidades claras." },
-  { title: "Three.js com React Three Fiber", text: "A cena 3D é declarativa: cada elemento do acampamento é um componente." },
-  { title: "Partículas na GPU", text: "Chamas e brasas são calculadas inteiramente em shaders, sem custo para o processador." },
-  { title: "Aurora procedural", text: "O céu, as estrelas e a aurora são gerados por ruído matemático em tempo real." },
-  { title: "Instanciamento", text: "Dezenas de pinheiros são desenhados em poucas chamadas à placa de vídeo." },
-  { title: "Áudio sintetizado", text: "Fogueira, grilos e vento nascem da Web Audio API — nenhum arquivo de som é baixado." },
+  {
+    title: "React + TypeScript",
+    text: "Toda a interface é tipada e dividida em módulos com responsabilidades claras.",
+  },
+  {
+    title: "Three.js com React Three Fiber",
+    text: "A cena 3D é declarativa: cada elemento do acampamento é um componente.",
+  },
+  {
+    title: "Partículas na GPU",
+    text: "Chamas e brasas são calculadas inteiramente em shaders, sem custo para o processador.",
+  },
+  {
+    title: "Aurora procedural",
+    text: "O céu, as estrelas e a aurora são gerados por ruído matemático em tempo real.",
+  },
+  {
+    title: "Instanciamento",
+    text: "Dezenas de pinheiros são desenhados em poucas chamadas à placa de vídeo.",
+  },
+  {
+    title: "Áudio sintetizado",
+    text: "Fogueira, grilos e vento nascem da Web Audio API — nenhum arquivo de som é baixado.",
+  },
+];
+
+export type ProjectCategory = "Front-end" | "Full-stack" | "Interface" | "Acadêmico";
+
+export type Project = {
+  id: string;
+  title: string;
+  category: ProjectCategory;
+  tagline: string;
+  description: string;
+  technologies: string[];
+  liveUrl?: string;
+  repoUrl: string;
+  badge?: string;
+};
+
+export const projectCategories: (ProjectCategory | "Todos")[] = [
+  "Todos",
+  "Front-end",
+  "Full-stack",
+  "Interface",
+];
+
+export const projects: Project[] = [
+  {
+    id: "taskflow",
+    title: "TaskFlow",
+    category: "Front-end",
+    tagline: "Gerenciador de tarefas com foco em produtividade",
+    description:
+      "Aplicação web completa com categorização de atividades, alternância dinâmica de status, contadores em tempo real e persistência no navegador.",
+    technologies: ["HTML5", "CSS3", "JavaScript", "LocalStorage"],
+    liveUrl: "https://pedrolamin12.github.io/taskflow/",
+    repoUrl: "https://github.com/PedroLamin12/taskflow",
+    badge: "No ar",
+  },
+  {
+    id: "noctvrn",
+    title: "NOCTVRN",
+    category: "Full-stack",
+    tagline: "E-commerce editorial de streetwear conceitual",
+    description:
+      "Plataforma de comércio eletrônico com identidade visual dark, catálogo com filtros por categoria, carrinho interativo e experiência focada em moda e design.",
+    technologies: ["React", "TypeScript", "Tailwind CSS", "Radix UI", "Vite"],
+    liveUrl: "https://noctvrn-alpha.vercel.app",
+    repoUrl: "https://github.com/PedroLamin12/noctvrn",
+    badge: "Destaque",
+  },
+  {
+    id: "studyflow",
+    title: "StudyFlow",
+    category: "Front-end",
+    tagline: "Plataforma inteligente de organização de estudos",
+    description:
+      "Sistema para rotina acadêmica e de estudos: temporizador Pomodoro integrado, gestão de matérias, metas diárias e acompanhamento de progresso.",
+    technologies: ["React", "TypeScript", "Tailwind CSS", "Vite"],
+    liveUrl: "https://studyflow-v4.vercel.app",
+    repoUrl: "https://github.com/PedroLamin12/StudyFlow",
+    badge: "No ar",
+  },
+  {
+    id: "devlinks",
+    title: "DevLinks",
+    category: "Interface",
+    tagline: "Agregador de links e identidade digital",
+    description:
+      "Página de perfil e central de conexões desenvolvida no evento da Rocketseat. Possui alternância entre tema claro e escuro, design responsivo e avatar customizado.",
+    technologies: ["HTML5", "CSS3", "JavaScript", "Git"],
+    repoUrl: "https://github.com/PedroLamin12/Projeto-Rocketseat",
+    badge: "Rocketseat",
+  },
 ];
