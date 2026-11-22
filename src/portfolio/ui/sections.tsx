@@ -368,6 +368,17 @@ export function ProjectsSection() {
             key={p.id}
             className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border bg-card/60 p-5 transition-all hover:border-ember/40 hover:bg-card/90"
           >
+            {p.image && (
+              <div className="relative -mx-5 -mt-5 mb-4 aspect-video overflow-hidden border-b border-border/40 bg-muted/30">
+                <img
+                  src={p.image}
+                  alt={`Preview de ${p.title}`}
+                  className="h-full w-full object-cover object-top transition duration-500 group-hover:scale-105"
+                  loading="lazy"
+                />
+              </div>
+            )}
+
             <div className="space-y-2.5">
               <div className="flex items-center justify-between gap-2">
                 <span className="font-mono text-[0.62rem] tracking-[0.18em] text-ember uppercase">
@@ -438,6 +449,7 @@ export function ProjectsSection() {
     </div>
   );
 }
+
 
 /* ---------------- Contact ---------------- */
 

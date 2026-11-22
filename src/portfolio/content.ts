@@ -266,7 +266,7 @@ export const behindTheScenes = [
   },
 ];
 
-export type ProjectCategory = "Front-end" | "Full-stack" | "Interface" | "Acadêmico";
+export type ProjectCategory = "Front-end" | "Full-stack" | "Acadêmico";
 
 export type Project = {
   id: string;
@@ -278,13 +278,13 @@ export type Project = {
   liveUrl?: string;
   repoUrl: string;
   badge?: string;
+  image?: string;
 };
 
 export const projectCategories: (ProjectCategory | "Todos")[] = [
   "Todos",
   "Front-end",
   "Full-stack",
-  "Interface",
 ];
 
 export const projects: Project[] = [
@@ -299,6 +299,7 @@ export const projects: Project[] = [
     liveUrl: "https://pedrolamin12.github.io/taskflow/",
     repoUrl: "https://github.com/PedroLamin12/taskflow",
     badge: "No ar",
+    image: "/projects/taskflow.jpg",
   },
   {
     id: "noctvrn",
@@ -311,6 +312,7 @@ export const projects: Project[] = [
     liveUrl: "https://noctvrn-alpha.vercel.app",
     repoUrl: "https://github.com/PedroLamin12/noctvrn",
     badge: "Destaque",
+    image: "/projects/noctvrn.jpg",
   },
   {
     id: "studyflow",
@@ -323,16 +325,7 @@ export const projects: Project[] = [
     liveUrl: "https://studyflow-v4.vercel.app",
     repoUrl: "https://github.com/PedroLamin12/StudyFlow",
     badge: "No ar",
-  },
-  {
-    id: "devlinks",
-    title: "DevLinks",
-    category: "Interface",
-    tagline: "Agregador de links e identidade digital",
-    description:
-      "Página de perfil e central de conexões desenvolvida no evento da Rocketseat. Possui alternância entre tema claro e escuro, design responsivo e avatar customizado.",
-    technologies: ["HTML5", "CSS3", "JavaScript", "Git"],
-    repoUrl: "https://github.com/PedroLamin12/Projeto-Rocketseat",
-    badge: "Rocketseat",
+    image: "/projects/studyflow.jpg",
   },
 ];
+
